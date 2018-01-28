@@ -26,11 +26,19 @@ db.reverse().forEach(function(element) {
       var item = itemsToIterate[i];
       var cell = row.insertCell(item);
       cell.innerHTML = item;
-      if (item === 'Bom') cell.style.backgroundColor = "green";
+      if (item === 'Forte') cell.style.backgroundColor = "green";
       if (item === 'Fraco') cell.style.backgroundColor = "red";
       if (item === '') cell.style.backgroundColor = "black";
   }
 
-  var cellName = row.insertCell(0);
-  cellName.innerHTML = element.name;
+  if (element.isClass) {
+    var th = document.createElement('th');
+    th.innerHTML = element.name;
+    th.colSpan = 13;
+    th.style.backgroundColor = "black";
+    row.appendChild(th);
+  } else {
+    var cellName = row.insertCell(0);
+    cellName.innerHTML = element.name;
+  }
 }, this);
