@@ -1,11 +1,3 @@
-// original code. proceed ?
-
-// '.tbl-content' consumed little space for vertical scrollbar, scrollbar width depend on browser/os/platfrom. Here calculate the scollbar width .
-// $(window).on("load resize ", function() {
-//   var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
-//   $('.tbl-header').css({'padding-right':scrollWidth});
-// }).resize();
-
 'use strict';
 
 var app = {
@@ -26,16 +18,18 @@ db.reverse().forEach(function(element) {
       var item = itemsToIterate[i];
       var cell = row.insertCell(item);
       cell.innerHTML = item;
-      if (item === 'Forte') cell.style.backgroundColor = "green";
-      if (item === 'Fraco') cell.style.backgroundColor = "red";
-      if (item === '') cell.style.backgroundColor = "black";
+      if (item === 'Forte') cell.style.backgroundColor = 'green';
+      if (item === 'Medio') cell.style.backgroundColor = '#F7B733';
+      if (item === 'Fraco') cell.style.backgroundColor = 'indianred'; // verde fraco
+      // red '#FC4A1A'
+      // if (item === '') cell.style.backgroundColor = "black";
   }
 
   if (element.isClass) {
     var th = document.createElement('th');
     th.innerHTML = element.name;
     th.colSpan = 13;
-    th.style.backgroundColor = "black";
+    th.style.backgroundColor = '#4ABDAC';
     row.appendChild(th);
   } else {
     var cellName = row.insertCell(0);

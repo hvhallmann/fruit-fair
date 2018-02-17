@@ -1,6 +1,5 @@
-
 h1{
-  font-size: 30px;
+  font-size: 20px;
   color: #fff;
   text-transform: uppercase;
   font-weight: 300;
@@ -9,42 +8,38 @@ h1{
 }
 table{
   width:100%;
-  table-layout: fixed;
 }
 .tbl-header{
   background-color: rgba(255,255,255,0.3);
  }
 .tbl-content{
-  height:300px;
+  height:600px;
   overflow-x:auto;
   margin-top: 0px;
   border: 1px solid rgba(255,255,255,0.3);
 }
 th{
-  padding: 20px 15px;
+  padding: 10px 5px;
   text-align: left;
-  font-weight: 500;
   font-size: 12px;
   color: #fff;
   text-transform: uppercase;
 }
 td{
-  padding: 15px;
-  text-align: left;
+  padding: 2px;
+  text-align: center;
   vertical-align:middle;
-  font-weight: 300;
-  font-size: 12px;
+  font-size: 10px;
   color: #fff;
   border-bottom: solid 1px rgba(255,255,255,0.1);
 }
 td:first-child {
-  font-weight: 360;
-  font-size: 16px;
-  color: #aaaaaa;
+  font-size: 15px;
+  background-color: #4ABDAC;
 }
 
 
-/* demo styles */
+/* demo styles - prata #DFDCE3 */
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
 body{
@@ -52,10 +47,6 @@ body{
   background: linear-gradient(to right, #25c481, #25b7c4);
   font-family: 'Roboto', sans-serif;
 }
-section{
-  margin: 50px;
-}
-
 
 /* follow me template */
 .made-with-love {

@@ -7,7 +7,6 @@
   <link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather PWA</title>
-  <link rel="stylesheet" type="text/css" href="styles/inline.css">
   <link rel="stylesheet" type="text/css" href="styles/table.css">
 
   <!-- TODO add manifest here -->
@@ -16,17 +15,19 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Weather PWA">
-  <link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
-  <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+  <link rel="apple-touch-icon" href="images/icons/bananas-152.png">
+  <meta name="msapplication-TileImage" content="images/icons/bananas-144.png">
   <meta name="msapplication-TileColor" content="#2F3BA2">
 </head>
 
 <body>
+
+  <script src="scripts/trydb.js"></script>
+
   <main class="main">
     <section>
-      <!--for demo wrap-->
-      <h1>Fixed Table header-yo</h1>
-      <div class="tbl-header">
+      <h1>Feira da Fruta</h1>
+      <div class="tbl-content">
         <table cellpadding="0" cellspacing="0" border="0">
           <thead>
             <tr>
@@ -45,10 +46,6 @@
               <th>Dez</th>
             </tr>
           </thead>
-        </table>
-      </div>
-      <div class="tbl-content">
-        <table cellpadding="0" cellspacing="0" border="0">
           <tbody class="tbl-body">
           </tbody>
         </table>
@@ -56,7 +53,6 @@
     </section>
   </main>
 
-  <script src="scripts/frutas-db.js" async></script>
   <script src="scripts/table.js" async></script>
 
 </body>
@@ -67,5 +63,5 @@
 <div class="made-with-love">
   Made with
   <i>♥</i> by
-  <a target="_blank" href="https://codepen.io/nikhil8krishnan">Nikhil Krishnan</a>
+  <a target="_blank" href="https://codepen.io/nikhil8krishnan">Henrique Hallmann</a>
 </div>

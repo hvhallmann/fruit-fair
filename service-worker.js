@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var dataCacheName = 'weatherData-v3';
-var cacheName = 'weatherPWA-step-10';
+var dataCacheName = 'frutFair-v1';
+var cacheName = 'frutFairPWA';
 var filesToCache = [
   '/',
   '/index.html',
