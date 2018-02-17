@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var dataCacheName = 'frutFair-v2';
+var dataCacheName = 'frutFair-v3';
 var cacheName = 'frutFairPWA';
 var filesToCache = [
   '/',
   '/index.html',
-  '/scripts/app.js'
+  '/scripts/app.js',
+  '/scripts/table.js',
+  '/scripts/trydb.js',
+  '/styles/table.css'
 ];
 
 self.addEventListener('install', function(e) {
