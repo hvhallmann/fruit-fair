@@ -20,5 +20,5 @@ const aFruitSeason = aFruitLine.map(item => {
   fruit.family = family;
   return fruit;
 });
-console.log('const db = ', aFruitSeason);
+// console.log('const db = ', aFruitSeason);
 
