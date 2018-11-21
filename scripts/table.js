@@ -7,15 +7,30 @@ var app = {
   spinner: document.querySelector('.loader'),
   lineTemplate: document.querySelector('.cardTemplate'),
   container: document.querySelector('.main'),
-  tableBody: document.querySelector('.tbl-body')
+  tableBody: document.querySelector('.tbl-body'),
+  cards: document.querySelector('.cards')
 };
+console.log('ím here');
 
+function addCard() {
+  var li = document.createElement('li');
+  li.class = "cards__item";
+
+}
+
+// iterate over each element
 db.reverse().forEach(function(element) {
   var row = app.tableBody.insertRow(0);
 
   var itemsToIterate = element.season.reverse();
+  //iterate over each season
   for (var i = 0, len = itemsToIterate.length; i < len; i++) {
       var item = itemsToIterate[i];
+
+      if (item === 'Forte' && (new Date()).getMonth() === i ) {
+        console.log('hj esta bom para', element.name);
+      }
+
       var cell = row.insertCell(item);
       cell.innerHTML = item;
       if (item === 'Forte') cell.style.backgroundColor = 'green';
