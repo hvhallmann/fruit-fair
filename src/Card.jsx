@@ -1,18 +1,22 @@
 import React, { Component } from "react";
-// import * as img from './assets/images/';
-import cardss from "./Card.css";
+import "./Card.css";
 
 // A imagem tem 11,3cm width por 8,51cm d height
 // com resolution de 7,87 pixel/cml
 // 18KB
 class Card extends Component {
   render() {
+    const metauUrl = import.meta.url;
+    const imageUrl = new URL(
+      `./assets/images/${this.props.image}.png`,
+      metauUrl,
+    ).href;
     return (
       <div className="card-size">
         <div className="card-image img-align">
           <img
-            src={require("./assets/images/" + this.props.image + ".png")}
-            alt="cat"
+            src={imageUrl}
+            alt={this.props.title || "fruta"}
             className="img-responsive"
           />
         </div>

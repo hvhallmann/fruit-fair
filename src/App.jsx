@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import staticDb from "./db/db.js";
-import Card from "./Card";
+import Card from "./Card.jsx";
 import "./App.css";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -52,7 +52,7 @@ class App extends Component {
     return nextMounth;
   }
   uniqueArray(arrArg) {
-    return arrArg.filter(function(elem, pos, arr) {
+    return arrArg.filter(function (elem, pos, arr) {
       return arr.indexOf(elem) === pos;
     });
   }
