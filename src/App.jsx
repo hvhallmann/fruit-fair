@@ -1,28 +1,8 @@
 import React, { Component } from "react";
 import staticDb from "./db/db.js";
 import Card from "./Card.jsx";
+import "./firebase.js";
 import "./App.css";
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyC-ykFI8GubAgv3woiPexxsXxYi2cF_OmU",
-  authDomain: "fruit-fair.firebaseapp.com",
-  databaseURL: "https://fruit-fair.firebaseio.com",
-  projectId: "fruit-fair",
-  storageBucket: "fruit-fair.firebasestorage.app",
-  messagingSenderId: "970958149529",
-  appId: "1:970958149529:web:8be0631b445bcc8aa32508",
-  measurementId: "G-2HPZ251H81",
-};
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 // you can read more on
 // https://www.smashingmagazine.com/2018/11/guide-pwa-progressive-web-applications/
