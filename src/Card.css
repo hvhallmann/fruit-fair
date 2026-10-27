@@ -6,6 +6,9 @@
 .img-responsive {
   display: block;
   max-height: 40px;
+  width: auto;
+  object-fit: contain;
+  margin: 0 auto;
 }
 
 .card-size {
