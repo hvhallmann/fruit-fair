@@ -61,6 +61,7 @@ const db = [
     isClass: false,
     key: "ameixa",
     family: "FRUTAS",
+    tip: "Firme, mas com leve flexibilidade ao apertar de leve. Casca lisa, brilhante e sem rachaduras; a película esbranquiçada natural indica frescor.",
   },
   {
     name: "Figo",
@@ -81,6 +82,7 @@ const db = [
     isClass: false,
     key: "figo",
     family: "FRUTAS",
+    tip: "Macio ao toque sem estar vazando líquido. O cabinho deve estar firme e a base fechada, sem rachaduras profundas ou fermentação.",
   },
   {
     name: "Banana",
@@ -122,6 +124,7 @@ const db = [
     isClass: false,
     key: "caqui",
     family: "FRUTAS",
+    tip: "Se for tipo Fuyu, deve estar firme e bem alaranjado. Se for Rama/Coração, deve estar bem macio ao toque para não amarrar a boca.",
   },
   {
     name: "Côco Seco",
@@ -142,6 +145,7 @@ const db = [
     isClass: false,
     key: "coco-seco",
     family: "FRUTAS",
+    tip: "Chacoalhe perto do ouvido: deve dar para ouvir a água claramente lá dentro. Deve ser bem pesado e com os três 'olhos' secos e sem mofo.",
   },
   {
     name: "Côco Verde",
@@ -162,6 +166,7 @@ const db = [
     isClass: false,
     key: "coco-verde",
     family: "FRUTAS",
+    tip: "Prefira os mais redondos (costumam ter mais água) e pesados para o tamanho, com casca verde uniforme sem manchas marrons profundas.",
   },
   {
     name: "Goiaba",
@@ -203,6 +208,7 @@ const db = [
     isClass: false,
     key: "kiwi",
     family: "FRUTAS",
+    tip: "Aperte suavemente: deve ceder de forma leve e uniforme. Se estiver duro como pedra está muito ácido, e se afundar demais já passou do ponto.",
   },
   {
     name: "Laranja-Bahia",
@@ -223,6 +229,7 @@ const db = [
     isClass: false,
     key: "laranja-bahia",
     family: "FRUTAS",
+    tip: "Deve ser bem pesada para o tamanho (sinal de muito suco), com casca lisa e firme. O 'umbigo' na ponta deve estar intacto.",
   },
   {
     name: "Laranja-Lima",
@@ -243,6 +250,7 @@ const db = [
     isClass: false,
     key: "laranja-lima",
     family: "FRUTAS",
+    tip: "Casca fina e lisa, pesada na mão. Por ser menos ácida e bem doce, deve estar firme ao toque sem partes murchas.",
   },
   {
     name: "Laranja-Pêra",
@@ -263,6 +271,7 @@ const db = [
     isClass: false,
     key: "laranja-pera",
     family: "FRUTAS",
+    tip: "Prefira as mais pesadas em relação ao tamanho e de casca lisa e fina, garantindo bastante caldo e menos bagaço.",
   },
   {
     name: "Limão",
@@ -430,7 +439,7 @@ const db = [
     isClass: false,
     key: "melao",
     family: "FRUTAS",
-    tip: "Chacoalhe perto do ouvido: se sentir as sementes soltas mexendo, está maduro. O \"umbigo\" (oposto ao cabo) deve estar levemente macio e exalar aroma doce.",
+    tip: 'Chacoalhe perto do ouvido: se sentir as sementes soltas mexendo, está maduro. O "umbigo" (oposto ao cabo) deve estar levemente macio e exalar aroma doce.',
   },
   {
     name: "Morango",
@@ -472,7 +481,7 @@ const db = [
     isClass: false,
     key: "pera-nacional",
     family: "FRUTAS",
-    tip: "Prefira as bem firmes e pesadas para o tamanho, com casca sem rugas ou furos.",
+    tip: "Apalpe suavemente o topo (perto do cabinho): deve ceder levemente ao toque quando estiver pronta para consumo. A casca deve estar lisa e sem machucados profundos.",
   },
   {
     name: "Pêssego",
@@ -493,6 +502,7 @@ const db = [
     isClass: false,
     key: "pessego",
     family: "FRUTAS",
+    tip: "Aroma adocicado intenso perto do cabinho. A polpa deve ceder suavemente ao toque leve e a casca ter cor viva sem manchas escuras.",
   },
   {
     name: "Pinhão",
@@ -513,6 +523,7 @@ const db = [
     isClass: false,
     key: "pinhao",
     family: "FRUTAS",
+    tip: "Ponta marrom-escura e corpo amarelado/bege. Deve ser extremamente duro e pesado; evite cascas com furos ou aspecto borrachudo.",
   },
   {
     name: "Tangerina-Murgot",
@@ -533,6 +544,7 @@ const db = [
     isClass: false,
     key: "tangerina-murgot",
     family: "FRUTAS",
+    tip: "Casca lisa, firme e bem aderida aos gomos. Deve ser pesada na mão, garantindo que está bem suculenta.",
   },
   {
     name: "Tangerina-Ponkan",
@@ -553,6 +565,7 @@ const db = [
     isClass: false,
     key: "tangerina-ponkan",
     family: "FRUTAS",
+    tip: "Casca fofa e ligeiramente solta da polpa, facilitando descascar. Escolha as mais pesadas para garantir gomos cheios de caldo.",
   },
   {
     name: "Uva(Todas)",
@@ -726,6 +739,7 @@ const db = [
     isClass: false,
     key: "couve-chinesa",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Folhas crocantes, firmes e claras, com base compacta e sem manchas escuras ou folhas amareladas.",
   },
   {
     name: "Cheiro-Verde",
@@ -746,6 +760,7 @@ const db = [
     isClass: false,
     key: "cheiro-verde",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Folhas bem verdes, eretas e com aroma fresco e intenso. Evite maços com folhas amareladas ou talos melados na raiz.",
   },
   {
     name: "Couve-Manteiga",
@@ -766,6 +781,7 @@ const db = [
     isClass: false,
     key: "couve-manteiga",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Folhas de verde escuro brilhante, firmes e esticadas. Evite folhas amareladas, opacas ou com talos ressecados.",
   },
   {
     name: "Escarola",
@@ -786,6 +802,7 @@ const db = [
     isClass: false,
     key: "escarola",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Folhas verdes viçosas e coração mais clarinho. Fuja de maços com folhas murchas, amareladas ou com manchas.",
   },
   {
     name: "Espinafre",
@@ -827,6 +844,7 @@ const db = [
     isClass: false,
     key: "repolho",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Deve ser pesado para o seu tamanho (bem compactado por dentro), com folhas firmes, crocantes e sem rachaduras.",
   },
   {
     name: "Rúcula",
@@ -916,6 +934,7 @@ const db = [
     isClass: false,
     key: "berinjela",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Casca lisa, brilhante e bem roxa uniforme. Deve estar firme ao toque e com o cabinho verde e fresco.",
   },
   {
     name: "Chuchu",
@@ -936,6 +955,7 @@ const db = [
     isClass: false,
     key: "chuchu",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Casca verde-clara brilhante e firme ao toque. Evite chuchus amarelados, com espinhos endurecidos ou já brotando.",
   },
   {
     name: "Jilo",
@@ -956,6 +976,7 @@ const db = [
     isClass: false,
     key: "jilo",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Verde vivo e brilhante, firme ao toque. Evite jilós amarelados ou alaranjados, pois já passaram do ponto e ficam excessivamente amargos.",
   },
   {
     name: "Milho Verde",
@@ -1039,6 +1060,7 @@ const db = [
     isClass: false,
     key: "quiabo",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Faça o teste da ponta: quebre a pontinha com os dedos; se quebrar com um estalo fácil, está novo e sem fibras. Se dobrar, está duro.",
   },
   {
     name: "Tomate",
@@ -1080,12 +1102,49 @@ const db = [
     isClass: false,
     key: "vagem",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Ao dobrar a vagem levemente, ela deve quebrar com facilidade com som seco. Se ficar elástica e dobrar sem quebrar, está fibrosa.",
   },
   {
-    name: "HORTALIÇAS-TUBEROSAS",
-    season: [],
-    isClass: true,
+    name: "Gengibre",
+    season: [
+      "Fraco",
+      "Fraco",
+      "Fraco",
+      "Medio",
+      "Forte",
+      "Forte",
+      "Forte",
+      "Forte",
+      "Medio",
+      "Fraco",
+      "Fraco",
+      "Fraco",
+    ],
+    isClass: false,
+    key: "gengibre",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Casca lisa, fina e ligeiramente brilhante. O rizoma deve ser bem firme e pesado; evite rizomas murchos, rugosos ou com pontas enrugadas.",
+  },
+  {
+    name: "Taro",
+    season: [
+      "Fraco",
+      "Medio",
+      "Medio",
+      "Medio",
+      "Medio",
+      "Forte",
+      "Forte",
+      "Forte",
+      "Forte",
+      "Medio",
+      "Fraco",
+      "Fraco",
+    ],
+    isClass: false,
+    key: "taro",
+    family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Menor e mais arredondado que o inhame. Deve ser bem duro ao toque e pesado para o tamanho, sem partes amolecidas ou com mofo na casca peluda.",
   },
   {
     name: "Alho",
@@ -1148,6 +1207,7 @@ const db = [
     isClass: false,
     key: "batata-doce",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Bem firme e pesada, com casca lisa e uniforme. Evite as que apresentam brotos, partes moles ou manchas escuras.",
   },
   {
     name: "Batata-Salsa",
@@ -1168,6 +1228,7 @@ const db = [
     isClass: false,
     key: "batata-salsa",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Mandioquinha rígida e amarela viva, com extremidades viçosas. Evite raízes amolecidas, borrachudas ou pontas escuras.",
   },
   {
     name: "Beterraba",
@@ -1251,6 +1312,7 @@ const db = [
     isClass: false,
     key: "inhame",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Extremamente rígido e pesado para o tamanho. Descarte os que tiverem partes fofas, moles ou áreas com umidade.",
   },
   {
     name: "Mandioca-Aipim",
@@ -1292,6 +1354,7 @@ const db = [
     isClass: false,
     key: "nabo",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Casca lisa, brilhante e sem rugas, bem duro ao toque. Se vier com folhas, elas devem estar verdes e frescas.",
   },
   {
     name: "Rabanete",
@@ -1312,6 +1375,7 @@ const db = [
     isClass: false,
     key: "rabanete",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Tamanho pequeno a médio, casca vermelha viva e brilhante. Deve ser bem duro; rabanetes moles costumam estar esponjosos por dentro.",
   },
 ];
 
