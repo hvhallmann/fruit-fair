@@ -27,6 +27,7 @@ A responsive React web application that helps consumers discover which fruits an
 - **Previous & Upcoming Season Insights:** Highlights items that were in peak season last month, as well as fruits coming into season next month.
 - **Extended Availability:** Shows fruits with moderate availability ("Médio") across current, previous, and next months.
 - **Visual Grid UI:** Responsive card layout styled with Spectre.css displaying fruit illustrations and names.
+- **PWA (Progressive Web App):** Installable on mobile and desktop devices with complete offline support and background caching via `vite-plugin-pwa`.
 - **Firebase Analytics:** Integrated Firebase app configuration and Google Analytics tracking.
 
 ---

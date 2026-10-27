@@ -20,7 +20,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^5.4.11"
+    "vite": "^5.4.11",
+    "vite-plugin-pwa": "^2.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"
