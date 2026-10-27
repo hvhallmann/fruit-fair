@@ -93,6 +93,7 @@ class App extends Component {
           className="column col-xs-3"
           title={elem.name}
           image={elem.key}
+          tip={elem.tip}
         />
       ));
     const secListItems =
@@ -103,6 +104,7 @@ class App extends Component {
           className="column col-xs-3"
           title={elem.name}
           image={elem.key}
+          tip={elem.tip}
         />
       ));
     const thirdListItems =
@@ -113,6 +115,7 @@ class App extends Component {
           className="column col-xs-3"
           title={elem.name}
           image={elem.key}
+          tip={elem.tip}
         />
       ));
     const yellowListItems =
@@ -123,6 +126,7 @@ class App extends Component {
           className="column col-xs-3"
           title={elem.name}
           image={elem.key}
+          tip={elem.tip}
         />
       ));
     return (

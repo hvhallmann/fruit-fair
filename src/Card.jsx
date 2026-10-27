@@ -18,25 +18,72 @@ function getFruitImage(imageKey) {
 }
 
 class Card extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { showTip: false };
+  }
+
+  handleClick = () => {
+    if (this.props.tip) {
+      this.setState((prev) => ({ showTip: !prev.showTip }));
+    }
+  };
+
+  handleOverlayClick = (e) => {
+    e.stopPropagation();
+    this.setState({ showTip: false });
+  };
+
   render() {
     const imageUrl = getFruitImage(this.props.image);
+    const hasTip = !!this.props.tip;
     return (
-      <div className="card-size">
-        <div className="card-image img-align">
-          <img
-            src={imageUrl}
-            alt={this.props.title || "fruta"}
-            className="img-responsive"
-            width="40"
-            height="40"
-            loading="lazy"
-            decoding="async"
-          />
+      <>
+        <div
+          className={`card-size${hasTip ? " card-clickable" : ""}`}
+          onClick={this.handleClick}
+        >
+          <div className="card-image img-align">
+            <img
+              src={imageUrl}
+              alt={this.props.title || "fruta"}
+              className="img-responsive"
+              width="40"
+              height="40"
+              loading="lazy"
+              decoding="async"
+            />
+            {hasTip && <span className="card-tip-icon">💡</span>}
+          </div>
+          <div className="card-footer">
+            <div className="card-title h7">{this.props.title}</div>
+          </div>
         </div>
-        <div className="card-footer">
-          <div className="card-title h7">{this.props.title}</div>
-        </div>
-      </div>
+        {this.state.showTip && (
+          <div className="tip-overlay" onClick={this.handleOverlayClick}>
+            <div className="tip-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="tip-modal-header">
+                <img
+                  src={imageUrl}
+                  alt={this.props.title || "fruta"}
+                  className="tip-modal-image"
+                  width="48"
+                  height="48"
+                />
+                <strong className="tip-modal-title">{this.props.title}</strong>
+                <button
+                  className="tip-modal-close"
+                  onClick={this.handleOverlayClick}
+                  aria-label="Fechar"
+                >
+                  ✕
+                </button>
+              </div>
+              <p className="tip-modal-text">{this.props.tip}</p>
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 }

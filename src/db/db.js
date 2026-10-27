@@ -19,6 +19,7 @@ const db = [
     isClass: false,
     key: "abacate",
     family: "FRUTAS",
+    tip: "Apalpe suavemente. Se ceder levemente ao redor do cabinho, está no ponto. Tire o cabinho com o polegar: fundo amarelo/verde é sinal de fruta perfeita; fundo marrom indica que passou do ponto.",
   },
   {
     name: "Abacaxi",
@@ -39,6 +40,7 @@ const db = [
     isClass: false,
     key: "abacaxi",
     family: "FRUTAS",
+    tip: "Faça o teste da coroa. Puxe uma folha do centro: se sair facinho, está maduro e docinho. Se a folha não sair de jeito nenhum, ainda está verde.",
   },
   {
     name: "Ameixa",
@@ -99,6 +101,7 @@ const db = [
     isClass: false,
     key: "banana",
     family: "FRUTAS",
+    tip: "Prefira as de cabo curto, pois costumam ser bem docinhas. Se o cabo for longo, a chance de estar sem gosto é maior.",
   },
   {
     name: "Caqui",
@@ -179,6 +182,7 @@ const db = [
     isClass: false,
     key: "goiaba",
     family: "FRUTAS",
+    tip: "Aroma marcante e doce à distância. Ao apertar levemente, a casca deve ceder só um pouquinho — se estiver muito dura, está verde; se estiver muito mole, já passou.",
   },
   {
     name: "Kiwi",
@@ -279,6 +283,7 @@ const db = [
     isClass: false,
     key: "limao",
     family: "FRUTAS",
+    tip: "Escolha os de casca bem lisinha, que garantem bastante caldo. Quando a casca estiver rugosa ou grossa, costuma estar verde e seco por dentro.",
   },
   {
     name: "Maçã",
@@ -299,6 +304,7 @@ const db = [
     isClass: false,
     key: "maca",
     family: "FRUTAS",
+    tip: "Prefira as bem firmes e pesadas para o tamanho, com casca sem rugas ou furos. Listras bem marcadas e cor viva indicam mais sabor.",
   },
   {
     name: "Mamão Formosa",
@@ -319,6 +325,7 @@ const db = [
     isClass: false,
     key: "mamao-formosa",
     family: "FRUTAS",
+    tip: "Casca com tom amarelado/alaranjado que cede levemente ao toque suave. Evite os que têm manchas pretas profundas ou estão moles perto da haste.",
   },
   {
     name: "Mamão Havaí",
@@ -339,6 +346,7 @@ const db = [
     isClass: false,
     key: "mamao-havai",
     family: "FRUTAS",
+    tip: "Casca com tom amarelado/alaranjado que cede levemente ao toque suave. Evite os que têm manchas pretas profundas ou estão moles perto da haste.",
   },
   {
     name: "Manga",
@@ -359,6 +367,7 @@ const db = [
     isClass: false,
     key: "manga",
     family: "FRUTAS",
+    tip: "Guie-se pelo aroma intenso e doce perto do cabinho e pela firmeza: ao apertar suavemente, a polpa deve ceder levemente sem afundar.",
   },
   {
     name: "Maracujá",
@@ -379,6 +388,7 @@ const db = [
     isClass: false,
     key: "maracuja",
     family: "FRUTAS",
+    tip: "Tem que estar bem enrugado e pesado na mão (com cara de velho). Se estiver com a casca toda lisinha e leve, quase não tem polpa e não compensa levar.",
   },
   {
     name: "Melancia",
@@ -399,6 +409,7 @@ const db = [
     isClass: false,
     key: "melancia",
     family: "FRUTAS",
+    tip: "Procure a mancha de solo na casca — essa parte deve estar bem amarelada (não branca ou verde). Bata com os nós dos dedos: som oco/abafado indica que está madura e doce.",
   },
   {
     name: "Melão",
@@ -419,6 +430,7 @@ const db = [
     isClass: false,
     key: "melao",
     family: "FRUTAS",
+    tip: "Chacoalhe perto do ouvido: se sentir as sementes soltas mexendo, está maduro. O \"umbigo\" (oposto ao cabo) deve estar levemente macio e exalar aroma doce.",
   },
   {
     name: "Morango",
@@ -439,6 +451,7 @@ const db = [
     isClass: false,
     key: "morango",
     family: "FRUTAS",
+    tip: "Escolha caixas com frutas vermelhas por inteiro, inclusive perto do cabinho verde. Partes brancas ou verdes indicam que ficará azedo, pois não amadurece depois de colhido.",
   },
   {
     name: "Pêra-Nacional",
@@ -459,6 +472,7 @@ const db = [
     isClass: false,
     key: "pera-nacional",
     family: "FRUTAS",
+    tip: "Prefira as bem firmes e pesadas para o tamanho, com casca sem rugas ou furos.",
   },
   {
     name: "Pêssego",
@@ -559,6 +573,7 @@ const db = [
     isClass: false,
     key: "uva-todas",
     family: "FRUTAS",
+    tip: "Dê uma olhada no cabinho do cacho: se estiver limpinho e bem verdinho, a uva é nova e bem doce. Cabo escuro, seco ou passado indica fruta velha e sem sabor.",
   },
   {
     name: "Uva-Italia-Rubi",
@@ -579,6 +594,7 @@ const db = [
     isClass: false,
     key: "uva-italia-rubi",
     family: "FRUTAS",
+    tip: "Dê uma olhada no cabinho do cacho: se estiver limpinho e bem verdinho, a uva é nova e bem doce. Cabo escuro, seco ou passado indica fruta velha e sem sabor.",
   },
   {
     name: "Uva-Niagara",
@@ -599,6 +615,7 @@ const db = [
     isClass: false,
     key: "uva-niagara",
     family: "FRUTAS",
+    tip: "Dê uma olhada no cabinho do cacho: se estiver limpinho e bem verdinho, a uva é nova e bem doce. Cabo escuro, seco ou passado indica fruta velha e sem sabor.",
   },
   {
     name: "HORTALIÇAS-HEBÁCEAS",
@@ -625,6 +642,7 @@ const db = [
     isClass: false,
     key: "agriao",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Folhas bem verdes, crocantes e eretas. Evite maços com folhas amareladas ou bordas queimadas.",
   },
   {
     name: "Alface",
@@ -645,6 +663,7 @@ const db = [
     isClass: false,
     key: "alface",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Folhas bem verdes, crocantes e eretas. Evite maços com folhas amareladas ou bordas queimadas.",
   },
   {
     name: "Brócolis",
@@ -665,6 +684,7 @@ const db = [
     isClass: false,
     key: "brocolis",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Buquês bem fechados e compactos. O brócolis deve ser verde-escuro (sem pontinhos amarelos).",
   },
   {
     name: "Couve-Flor",
@@ -685,6 +705,7 @@ const db = [
     isClass: false,
     key: "couve-flor",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Buquês bem fechados e compactos. A couve-flor deve ter cor branca ou creme uniforme, sem manchas escuras.",
   },
   {
     name: "Couve-Chinesa",
@@ -785,6 +806,7 @@ const db = [
     isClass: false,
     key: "espinafre",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Folhas bem verdes, crocantes e eretas. Evite maços com folhas amareladas ou bordas queimadas.",
   },
   {
     name: "Repolho",
@@ -825,6 +847,7 @@ const db = [
     isClass: false,
     key: "rucula",
     family: "HORTALIÇAS-HEBÁCEAS",
+    tip: "Folhas bem verdes, crocantes e eretas. Evite maços com folhas amareladas ou bordas queimadas.",
   },
   {
     name: "HORTALIÇAS-FRUTOS",
@@ -851,6 +874,7 @@ const db = [
     isClass: false,
     key: "abobora-todas",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Bata com os nós dos dedos: som oco indica que está no ponto. Som agudo ou sólido significa que ainda está verde.",
   },
   {
     name: "Abobrinha",
@@ -871,6 +895,7 @@ const db = [
     isClass: false,
     key: "abobrinha",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Tamanho médio a pequeno, com casca verde firme e sem brilho excessivo. Os muito grandes costumam ter muitas sementes e polpa aguada.",
   },
   {
     name: "Berinjela",
@@ -951,6 +976,7 @@ const db = [
     isClass: false,
     key: "milho-verde",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "A palha deve estar bem verde e úmida, com os cabelos marrom-escuros. Pressione um grão pela palha: se soltar um líquido leitoso, está novo e macio.",
   },
   {
     name: "Pepino - Todos",
@@ -971,6 +997,7 @@ const db = [
     isClass: false,
     key: "pepino",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Tamanho médio a pequeno, com casca verde firme e sem brilho excessivo. Os muito grandes costumam ter muitas sementes e polpa aguada.",
   },
   {
     name: "Pimentão",
@@ -991,6 +1018,7 @@ const db = [
     isClass: false,
     key: "pimentao",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Pele lisa, brilhante e rígida. Na base, os de 4 gomos tendem a ser mais doces (ótimos para comer crus); os de 3 gomos são mais firmes para cozinhar.",
   },
   {
     name: "Quiabo",
@@ -1031,6 +1059,7 @@ const db = [
     isClass: false,
     key: "tomate",
     family: "HORTALIÇAS-FRUTOS",
+    tip: "Deve ser pesado em relação ao tamanho e levemente macio ao toque (sem estar mole). Se as folhas do cabinho estiverem presas e verdes, está bem fresco.",
   },
   {
     name: "Vagem",
@@ -1077,6 +1106,7 @@ const db = [
     isClass: false,
     key: "alho",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Cabeça firme, pesada e fechada. Evite dentes murchos, ocos ou que já estejam brotando (o broto verde deixa o alho amargo).",
   },
   {
     name: "Batata",
@@ -1097,6 +1127,7 @@ const db = [
     isClass: false,
     key: "batata",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Casca lisa e sem manchas esverdeadas (o verde indica solanina, que é amarga e indigesta).",
   },
   {
     name: "Batata-Doce",
@@ -1157,6 +1188,7 @@ const db = [
     isClass: false,
     key: "beterraba",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Tamanho médio, com casca lisa e firme. Se ainda tiver as folhas verdes na ponta, é sinal de colheita recente.",
   },
   {
     name: "Cebola",
@@ -1177,6 +1209,7 @@ const db = [
     isClass: false,
     key: "cebola",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Casca externa seca e crocante como papel. O bulbo deve ser bem duro ao apertar, principalmente perto do pescoço.",
   },
   {
     name: "Cenoura",
@@ -1197,6 +1230,7 @@ const db = [
     isClass: false,
     key: "cenoura",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Tamanho médio, com casca lisa e firme. Se ainda tiver as folhas verdes na ponta, é sinal de colheita recente.",
   },
   {
     name: "Inhame",
@@ -1237,6 +1271,7 @@ const db = [
     isClass: false,
     key: "mandioca-aipim",
     family: "HORTALIÇAS-TUBEROSAS",
+    tip: "Na ponta cortada, a polpa deve ser branca ou amarelada uniforme, sem fiapos pretos ou azuis cruzando o miolo.",
   },
   {
     name: "Nabo",

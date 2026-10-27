@@ -1,6 +1,7 @@
 .img-align {
   align-self: center;
   height: 40px;
+  position: relative;
 }
 
 .img-responsive {
@@ -15,4 +16,95 @@
   width: 60px;
   height: 66px;
   font-size: x-small;
+}
+
+.card-clickable {
+  cursor: pointer;
+}
+
+.card-clickable:active {
+  transform: scale(0.95);
+}
+
+.card-tip-icon {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  font-size: 10px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Tip modal overlay */
+.tip-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.tip-modal {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  max-width: 340px;
+  width: 100%;
+  padding: 16px;
+  animation: slideUp 0.2s ease-out;
+}
+
+.tip-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.tip-modal-image {
+  border-radius: 8px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.tip-modal-title {
+  flex: 1;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.tip-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #999;
+  padding: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.tip-modal-close:hover {
+  color: #333;
+}
+
+.tip-modal-text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

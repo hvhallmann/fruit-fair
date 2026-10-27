@@ -71,7 +71,10 @@ The project has been migrated from Create React App (`react-scripts`) to **Vite 
 5. **Modern Dynamic Asset Loading:**
    - Updated `Card.jsx` to load fruit images dynamically using Vite's ESM standard:
      ```javascript
-     const imageUrl = new URL(`./assets/images/${this.props.image}.png`, import.meta.url).href;
+     const imageUrl = new URL(
+       `./assets/images/${this.props.image}.png`,
+       import.meta.url,
+     ).href;
      ```
 6. **React 18 Upgrade:**
    - Updated entry point (`src/index.jsx`) to use React 18's `createRoot` API instead of legacy `ReactDOM.render`.
@@ -91,6 +94,7 @@ The project has been migrated from Create React App (`react-scripts`) to **Vite 
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-username/fruit-fair-react.git
    cd fruit-fair-react
@@ -107,11 +111,11 @@ The project has been migrated from Create React App (`react-scripts`) to **Vite 
 
 In the project directory, you can run:
 
-| Command | Description |
-| :--- | :--- |
-| `npm run dev` *(or `npm start`)* | Starts the Vite local development server at `http://localhost:3000`. |
-| `npm run build` | Compiles and bundles production assets into the `dist/` directory. |
-| `npm run preview` | Locally serves the production build in `dist/` for verification. |
+| Command                          | Description                                                          |
+| :------------------------------- | :------------------------------------------------------------------- |
+| `npm run dev` _(or `npm start`)_ | Starts the Vite local development server at `http://localhost:3000`. |
+| `npm run build`                  | Compiles and bundles production assets into the `dist/` directory.   |
+| `npm run preview`                | Locally serves the production build in `dist/` for verification.     |
 
 ---
 
@@ -147,3 +151,10 @@ The application classifies items dynamically by comparing the current date (`new
 2. **Boa pedida do mês anterior (Previous Month):** Items whose season rating in the preceding month was `"Forte"`.
 3. **Saindo do forno para o próximo mês (Next Month):** Items whose peak season begins next month.
 4. **Ainda disponíveis (Moderate Availability):** Items with a `"Medio"` rating across the previous, current, or next month.
+
+## Branchs, repos.
+
+There are 3 versions of this same project, here is version one
+[git](https://github.com/hvhallmann/fruit-fair) on master branch.
+on firebase support branch, there is the 3rd version. with second version and firebase support.
+The second version is here - [git](https://github.com/hvhallmann/fruit-fair-react) using old CRA react.
