@@ -84,7 +84,7 @@ The project has been migrated from Create React App (`react-scripts`) to **Vite 
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (version 18 or newer recommended; Node 20+ tested)
+- [Node.js](https://nodejs.org/) (version 26 or newer; Node 26.x tested)
 - [npm](https://www.npmjs.com/) (version 9+)
 
 ### Installation
