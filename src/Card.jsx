@@ -36,13 +36,9 @@ class Card extends Component {
 
   render() {
     const imageUrl = getFruitImage(this.props.image);
-    const hasTip = !!this.props.tip;
     return (
       <>
-        <div
-          className={`card-size${hasTip ? " card-clickable" : ""}`}
-          onClick={this.handleClick}
-        >
+        <div className={`card-size card-clickable"`} onClick={this.handleClick}>
           <div className="card-image img-align">
             <img
               src={imageUrl}
@@ -53,7 +49,6 @@ class Card extends Component {
               loading="lazy"
               decoding="async"
             />
-            {hasTip && <span className="card-tip-icon">💡</span>}
           </div>
           <div className="card-footer">
             <div className="card-title h7">{this.props.title}</div>

@@ -31,6 +31,12 @@ class App extends Component {
     if (nextMounth === 12) nextMounth = 0;
     return nextMounth;
   }
+  getMonthName(month) {
+    return new Intl.DateTimeFormat("pt-BR", {
+      month: "long",
+      timeZone: "UTC",
+    }).format(new Date(Date.UTC(2024, month, 1)));
+  }
   uniqueArray(arrArg) {
     return arrArg.filter(function (elem, pos, arr) {
       return arr.indexOf(elem) === pos;
@@ -85,6 +91,11 @@ class App extends Component {
     this.setState({ yellowCardsDataProvider: yellowListCards });
   }
   render() {
+    const currentMonth = new Date().getMonth();
+    const previousMonthName = this.getMonthName(
+      this.getPreviousMonth(currentMonth),
+    );
+    const nextMonthName = this.getMonthName(this.getNextMonth(currentMonth));
     const listItems =
       this.state.greenCardsDataProvider &&
       this.state.greenCardsDataProvider.map((elem, index) => (
@@ -163,13 +174,13 @@ class App extends Component {
           </div>
         </section>
         <section>
-          <h5>Boa pedida do mes anterior:</h5>
+          <h5>Boa pedida de {previousMonthName}:</h5>
           <div className="container grid-xs">
             <div className="columns-custom">{secListItems}</div>
           </div>
         </section>
         <section>
-          <h5>Saindo do forno para o proximo mes!</h5>
+          <h5>Saindo do forno para {nextMonthName}!</h5>
           <div className="container grid-xs">
             <div className="columns-custom">{thirdListItems}</div>
           </div>
