@@ -8,17 +8,20 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
-        "favicon.ico",
-        "apple-touch-icon.png",
-        "pwa-192x192.png",
-        "pwa-512x512.png",
-        "pwa-maskable-512x512.png",
+        "bananas-32.png",
+        "bananas-128.png",
+        "bananas-144.png",
+        "bananas-152.png",
+        "bananas-192.png",
+        "bananas-256.png",
+        "PWA-preview.jpeg",
       ],
       manifest: {
         name: "Feira da Fruta",
         short_name: "Feira da Fruta",
         description:
           "Guia prático de frutas, verduras e legumes da estação na feira.",
+        lang: "pt-BR",
         theme_color: "#2e7d32",
         background_color: "#ffffff",
         display: "standalone",
@@ -27,25 +30,40 @@ export default defineConfig({
         scope: "/",
         icons: [
           {
-            src: "/pwa-192x192.png",
+            src: "/bananas-32.png",
+            sizes: "32x32",
+            type: "image/png",
+          },
+          {
+            src: "/bananas-128.png",
+            sizes: "128x128",
+            type: "image/png",
+          },
+          {
+            src: "/bananas-144.png",
+            sizes: "144x144",
+            type: "image/png",
+          },
+          {
+            src: "/bananas-152.png",
+            sizes: "152x152",
+            type: "image/png",
+          },
+          {
+            src: "/bananas-192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/pwa-512x512.png",
-            sizes: "512x512",
+            src: "/bananas-256.png",
+            sizes: "256x256",
             type: "image/png",
-          },
-          {
-            src: "/pwa-maskable-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
           },
         ],
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,webp}"],
+        globPatterns: ["**/*.{js,css,html,ico,jpg,jpeg,png,svg,webp}"],
+        globIgnores: ["PWA-preview.jpeg"],
       },
     }),
   ],

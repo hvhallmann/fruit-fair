@@ -228,3 +228,10 @@ Match the content with contextual products users are already interested in:
 ---
 
 Which of these business models aligns best with your target audience—focusing on direct consumers, local producers, or corporate wellness?
+
+## to improve
+
+Prerender the page for search and sharing. Since this is one page hosted as a static app, I’d use a Vite-compatible SSR/SSG setup such as Vike to generate HTML containing the headings and produce cards before it reaches the browser. Keep React hydration for the interactive cards. Google can often render client-side apps, but social preview crawlers commonly rely on the initial HTML.
+One detail: the recommendations change by month. With prerendering, rebuild monthly, or use request-time SSR if the content must always be current in the first response. Also keep browser-only Firebase Analytics initialization out of the server-rendered module path.
+
+To verify the result, inspect View Page Source (not just the browser’s Elements panel) and confirm the content and metadata are present in the returned HTML.
