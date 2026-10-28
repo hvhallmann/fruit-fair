@@ -14,12 +14,46 @@
 
 .card-size {
   width: 60px;
-  height: 66px;
+  flex: 0 0 60px;
+  min-width: 0;
+  min-height: 66px;
+  height: auto;
   font-size: x-small;
 }
 
 .card-clickable {
   cursor: pointer;
+}
+
+.card-button {
+  display: block;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+}
+
+.card-title {
+  max-width: 100%;
+  font-size: 0.6rem;
+  line-height: 1.15;
+  overflow-wrap: normal;
+  white-space: normal;
+  word-break: normal;
+}
+
+.card-footer {
+  padding: 0;
+}
+
+.card-button:focus-visible,
+.tip-modal-close:focus-visible {
+  outline: 2px solid #14532d;
+  outline-offset: 3px;
 }
 
 .card-clickable:active {

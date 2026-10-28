@@ -141,9 +141,17 @@ class App extends Component {
         />
       ));
     return (
-      <div className="App">
+      <main className="App">
         <section>
-          <p style={{ letterSpacing: "0.1em" }}>
+          <h1
+            style={{
+              letterSpacing: "0.1em",
+              fontSize: "1rem",
+              fontWeight: "normal",
+              lineHeight: 1.5,
+              margin: "1em 0",
+            }}
+          >
             <span style={{ fontSize: "2rem" }}>F</span>
             <span style={{ color: "blueviolet", fontSize: "2rem" }}>E</span>
             <span style={{ fontSize: "2rem" }}>I</span>
@@ -156,7 +164,7 @@ class App extends Component {
             <span style={{ fontSize: "2rem" }}>U</span>
             <span style={{ color: "cornflowerblue", fontSize: "2rem" }}>T</span>
             <span style={{ color: "gold", fontSize: "2rem" }}>A </span>
-          </p>
+          </h1>
           <p>
             A sazonalidade é uma característica natural de todos os vegetais e
             plantas. É relacionada à época em que o cultivo rende frutos
@@ -168,31 +176,31 @@ class App extends Component {
             isso, veja quais opções temos HOJE para você escolher na hora de ir
             à feira:
           </p>
-          <h5>A sugestao é levar os seguintes produtos:</h5>
+          <h2 className="h5">A sugestao é levar os seguintes produtos:</h2>
           <div className="container grid-xs">
             <div className="columns-custom">{listItems}</div>
           </div>
         </section>
         <section>
-          <h5>Boa pedida de {previousMonthName}:</h5>
+          <h2 className="h5">Boa pedida de {previousMonthName}:</h2>
           <div className="container grid-xs">
             <div className="columns-custom">{secListItems}</div>
           </div>
         </section>
         <section>
-          <h5>Saindo do forno para {nextMonthName}!</h5>
+          <h2 className="h5">Saindo do forno para {nextMonthName}!</h2>
           <div className="container grid-xs">
             <div className="columns-custom">{thirdListItems}</div>
           </div>
         </section>
 
         <section>
-          <h5>Estes voce ainda consegue encontrar:</h5>
+          <h2 className="h5">Estes voce ainda consegue encontrar:</h2>
           <div className="container grid-xs">
             <div className="columns-custom">{yellowListItems}</div>
           </div>
         </section>
-      </div>
+      </main>
     );
   }
 }

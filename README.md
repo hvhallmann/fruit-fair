@@ -152,9 +152,13 @@ The application classifies items dynamically by comparing the current date (`new
 3. **Saindo do forno para o próximo mês (Next Month):** Items whose peak season begins next month.
 4. **Ainda disponíveis (Moderate Availability):** Items with a `"Medio"` rating across the previous, current, or next month.
 
-## Branchs, repos.
+## Branchs, repos
 
 There are 3 versions of this same project, here is version one
 [git](https://github.com/hvhallmann/fruit-fair) on master branch.
 on firebase support branch, there is the 3rd version. with second version and firebase support.
 The second version is here - [git](https://github.com/hvhallmann/fruit-fair-react) using old CRA react.
+
+### Checklist
+
+Good checklist to follow - https://specification.website/checklist/
