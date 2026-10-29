@@ -142,30 +142,13 @@ class App extends Component {
       ));
     return (
       <main className="App">
-        <section>
-          <h1
-            style={{
-              letterSpacing: "0.1em",
-              fontSize: "1rem",
-              fontWeight: "normal",
-              lineHeight: 1.5,
-              margin: "1em 0",
-            }}
-          >
-            <span style={{ fontSize: "2rem" }}>F</span>
-            <span style={{ color: "blueviolet", fontSize: "2rem" }}>E</span>
-            <span style={{ fontSize: "2rem" }}>I</span>
-            <span style={{ color: "cornflowerblue", fontSize: "2rem" }}>R</span>
-            <span style={{ color: "gold", fontSize: "2rem" }}>A </span>
-            <span style={{ fontSize: "1rem" }}>d</span>
-            <span style={{ fontSize: "1rem" }}>a </span>
-            <span style={{ color: "green", fontSize: "2rem" }}>F</span>
-            <span style={{ color: "blueviolet", fontSize: "2rem" }}>R</span>
-            <span style={{ fontSize: "2rem" }}>U</span>
-            <span style={{ color: "cornflowerblue", fontSize: "2rem" }}>T</span>
-            <span style={{ color: "gold", fontSize: "2rem" }}>A </span>
+        <header className="page-header">
+          <h1 className="brand">
+            <span className="brand-word">FEIRA</span>
+            <span className="brand-connector">da</span>
+            <span className="brand-word brand-word-accent">FRUTA</span>
           </h1>
-          <p>
+          <p className="intro-copy">
             A sazonalidade é uma característica natural de todos os vegetais e
             plantas. É relacionada à época em que o cultivo rende frutos
             naturalmente, sendo colhidos exatamente no tempo certo e nas
@@ -176,27 +159,35 @@ class App extends Component {
             isso, veja quais opções temos HOJE para você escolher na hora de ir
             à feira:
           </p>
-          <h2 className="h5">A sugestao é levar os seguintes produtos:</h2>
-          <div className="container grid-xs">
+        </header>
+        <section className="season-section">
+          <h2 className="section-title">
+            A sugestão é levar os seguintes produtos:
+          </h2>
+          <div className="produce-grid">
             <div className="columns-custom">{listItems}</div>
           </div>
         </section>
-        <section>
-          <h2 className="h5">Boa pedida de {previousMonthName}:</h2>
-          <div className="container grid-xs">
+        <section className="season-section">
+          <h2 className="section-title">Boa pedida de {previousMonthName}:</h2>
+          <div className="produce-grid">
             <div className="columns-custom">{secListItems}</div>
           </div>
         </section>
-        <section>
-          <h2 className="h5">Saindo do forno para {nextMonthName}!</h2>
-          <div className="container grid-xs">
+        <section className="season-section">
+          <h2 className="section-title">
+            Saindo do forno para {nextMonthName}!
+          </h2>
+          <div className="produce-grid">
             <div className="columns-custom">{thirdListItems}</div>
           </div>
         </section>
 
-        <section>
-          <h2 className="h5">Estes voce ainda consegue encontrar:</h2>
-          <div className="container grid-xs">
+        <section className="season-section">
+          <h2 className="section-title">
+            Estes você ainda consegue encontrar:
+          </h2>
+          <div className="produce-grid">
             <div className="columns-custom">{yellowListItems}</div>
           </div>
         </section>

@@ -10,8 +10,10 @@ describe("Feira da Fruta App", () => {
 
     // Verify introductory section is present
     expect(
-      screen.getByText(/A sugestao é levar os seguintes produtos/i),
+      screen.getByText(/A sugestão é levar os seguintes produtos/i),
     ).toBeInTheDocument();
+
+    expect(container.querySelectorAll(".produce-grid")).toHaveLength(4);
 
     // Verify images are rendered on the page
     const images = container.querySelectorAll("img");
