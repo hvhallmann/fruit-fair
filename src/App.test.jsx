@@ -6,6 +6,7 @@ import Card from "./Card";
 import staticDb from "./db/dbWithNutrients.js";
 import {
   centrumAdultTargets,
+  centrumAdultMineralTargets,
   centrumDailyMenu,
 } from "./db/centrumDailyMenu.js";
 
@@ -40,13 +41,15 @@ describe("Feira da Fruta App", () => {
     expect(screen.getAllByRole("heading", { level: 2 })).not.toHaveLength(0);
   });
 
-  it("switches between seasonal produce and the vitamins information", () => {
+  it("switches between seasonal produce and the vitamins and minerals information", () => {
     render(<App />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Vitaminas" }));
+    fireEvent.click(screen.getByRole("button", { name: "Vitaminas e minerais" }));
 
     expect(
-      screen.getByRole("heading", { name: "Vitaminas nos alimentos in natura" }),
+      screen.getByRole("heading", {
+        name: "Vitaminas e minerais nos alimentos in natura",
+      }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
@@ -56,7 +59,12 @@ describe("Feira da Fruta App", () => {
     expect(screen.getByText("695 g")).toBeInTheDocument();
     expect(
       screen.getByRole("table", {
-        name: /Valores estimados no cardápio comparados/,
+        name: /Valores estimados no cardápio comparados.*vitaminas/,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("table", {
+        name: /Valores estimados no cardápio comparados.*minerais/,
       }),
     ).toBeInTheDocument();
     expect(
@@ -74,10 +82,20 @@ describe("Feira da Fruta App", () => {
     expect(
       screen.getByRole("rowheader", { name: "Vitamina B5" }).closest("tr"),
     ).toHaveTextContent("Não calculado: dado ausente na base");
-    expect(screen.getByRole("button", { name: "Vitaminas" })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
+    expect(
+      screen.getByRole("button", { name: "Vitaminas e minerais" }),
+    ).toHaveAttribute("aria-current", "page");
+    const calciumRow = screen.getByRole("rowheader", { name: "Cálcio" }).closest("tr");
+    expect(calciumRow).toHaveTextContent("195,7 mg");
+    expect(calciumRow).toHaveTextContent("78,3%");
+    expect(
+      screen.getByRole("rowheader", { name: "Cobre" }).closest("tr"),
+    ).toHaveTextContent("2.457 µg");
+    const potassiumRow = screen
+      .getByRole("rowheader", { name: "Potássio" })
+      .closest("tr");
+    expect(potassiumRow).toHaveTextContent("10 µg");
+    expect(potassiumRow).toHaveTextContent("precisa ser confirmada");
 
     fireEvent.click(screen.getByRole("button", { name: "Feira do mês" }));
 
@@ -99,14 +117,20 @@ describe("Feira da Fruta App", () => {
     expect(menuFoods.every((food) => staticDb.some((item) => item.key === food.key)))
       .toBe(true);
     expect(centrumAdultTargets).toHaveLength(13);
+    expect(centrumAdultMineralTargets).toHaveLength(13);
     expect(
       centrumAdultTargets
         .filter((target) => target.key === null)
         .map((target) => target.name),
     ).toEqual(["Vitamina B5", "Vitamina K", "Biotina"]);
+    expect(
+    centrumAdultMineralTargets
+      .filter((target) => target.key === null)
+      .map((target) => target.name),
+    ).toEqual(["Cromo", "Iodo", "Molibdênio", "Cloro"]);
   });
 
-  it("provides sourced vitamin profiles for produce items", () => {
+  it("provides sourced vitamin and mineral profiles for produce items", () => {
     const produce = staticDb.filter((item) => !item.isClass);
 
     expect(produce).toHaveLength(65);
@@ -117,6 +141,8 @@ describe("Feira da Fruta App", () => {
       expect(item.nutrients.sourceUrl).toMatch(/^https:\/\/www\.tbca\.net\.br\//);
       expect(item.nutrients.per100g).toHaveProperty("vitaminC");
       expect(Array.isArray(item.nutrients.highlights)).toBe(true);
+      expect(item.nutrients.mineralsPer100g).toHaveProperty("calcium");
+      expect(Array.isArray(item.nutrients.mineralHighlights)).toBe(true);
     });
 
     const guavaNutrients = staticDb.find(
@@ -135,6 +161,20 @@ describe("Feira da Fruta App", () => {
     expect(
       staticDb.find((item) => item.key === "coco-verde").nutrients.note,
     ).toMatch(/não apresentou um perfil específico/);
+    expect(
+      Object.values(
+        staticDb.find((item) => item.key === "coco-verde").nutrients
+          .mineralsPer100g,
+      ).every((amount) => amount === null),
+    ).toBe(true);
+    expect(
+      staticDb.find((item) => item.key === "caqui").nutrients.mineralsPer100g
+        .copper,
+    ).toBeNull();
+    expect(
+      staticDb.find((item) => item.key === "ameixa").nutrients.mineralsPer100g
+        .selenium,
+    ).toBe(0);
   });
 
   it("opens tips from a button and closes with Escape, restoring focus", () => {

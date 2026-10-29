@@ -1,25 +1,40 @@
 import {
   centrumAdultTargets,
+  centrumAdultMineralTargets,
   centrumDailyMenu,
   centrumFormulaSource,
+  centrumMineralFormulaSource,
 } from "./db/centrumDailyMenu.js";
+import { mineralUnits } from "./db/mineralProfiles.js";
 import "./VitaminSection.css";
 
-function calculateNutrient(menu, database, nutrientKey) {
+function convertAmount(amount, fromUnit, toUnit) {
+  if (fromUnit === toUnit) return amount;
+  if (fromUnit === "mg" && toUnit === "µg") return amount * 1000;
+  if (fromUnit === "µg" && toUnit === "mg") return amount / 1000;
+  throw new Error(`Unsupported nutrient unit conversion: ${fromUnit} to ${toUnit}`);
+}
+
+function calculateNutrient(menu, database, nutrientKey, category, targetUnit) {
   let amount = 0;
   let complete = true;
 
   menu.forEach(({ foods }) => {
     foods.forEach(({ key, grams }) => {
       const food = database.find((item) => item.key === key);
-      const value = food?.nutrients?.per100g[nutrientKey];
+      const profile = category === "minerals"
+        ? food?.nutrients?.mineralsPer100g
+        : food?.nutrients?.per100g;
+      const value = profile?.[nutrientKey];
 
       if (typeof value !== "number") {
         complete = false;
         return;
       }
 
-      amount += (value * grams) / 100;
+      const sourceUnit =
+        category === "minerals" ? mineralUnits[nutrientKey].unit : targetUnit;
+      amount += (convertAmount(value, sourceUnit, targetUnit) * grams) / 100;
     });
   });
 
@@ -32,6 +47,81 @@ function formatAmount(amount) {
   }).format(amount);
 }
 
+function NutrientComparisonTable({ targets, database, category, label }) {
+  return (
+    <>
+      <h4 className="nutrient-group-title">{label}</h4>
+      <div className="nutrient-table-wrap">
+        <table className="nutrient-table">
+          <caption>
+            Valores estimados no cardápio comparados à quantidade declarada
+            por comprimido de Centrum Adulto ({label.toLowerCase()}).
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Nutriente</th>
+              <th scope="col">Centrum Adulto</th>
+              <th scope="col">Cardápio</th>
+              <th scope="col">Cobertura estimada</th>
+            </tr>
+          </thead>
+          <tbody>
+            {targets.map((target) => {
+              if (!target.key || target.notComparable) {
+                const reason = target.notComparable
+                  ? "Não calculado: unidade/quantidade do rótulo precisa ser confirmada"
+                  : "Não calculado: dado ausente na base";
+
+                return (
+                  <tr key={target.name}>
+                    <th scope="row">{target.name}</th>
+                    <td>
+                      {formatAmount(target.amount)} {target.unit}
+                    </td>
+                    <td colSpan="2">{reason}</td>
+                  </tr>
+                );
+              }
+
+              const result = calculateNutrient(
+                centrumDailyMenu,
+                database,
+                target.key,
+                category,
+                target.unit,
+              );
+              const coverage = (result.amount / target.amount) * 100;
+              const estimatePrefix = result.complete ? "" : "≥ ";
+              const partialLabel = result.complete
+                ? ""
+                : " (parcial; faltam dados)";
+
+              return (
+                <tr key={target.name}>
+                  <th scope="row">{target.name}</th>
+                  <td>
+                    {formatAmount(target.amount)} {target.unit}
+                  </td>
+                  <td>
+                    {estimatePrefix}
+                    {formatAmount(result.amount)} {target.unit}
+                    {partialLabel}
+                  </td>
+                  <td>
+                    {estimatePrefix}
+                    {formatAmount(coverage)}%
+                    {partialLabel}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
 function VitaminSection({ database }) {
   const totalGrams = centrumDailyMenu.reduce(
     (total, meal) =>
@@ -42,7 +132,7 @@ function VitaminSection({ database }) {
   return (
     <section className="vitamins-panel" aria-labelledby="vitamins-title">
       <h2 className="section-title" id="vitamins-title">
-        Vitaminas nos alimentos in natura
+        Vitaminas e minerais nos alimentos in natura
       </h2>
       <p className="vitamins-copy">
         Não existe equivalência direta entre um comprimido multivitamínico e
@@ -88,67 +178,18 @@ function VitaminSection({ database }) {
         <h3 className="section-title" id="nutrient-comparison-title">
           Estimativa em relação à fórmula
         </h3>
-        <div className="nutrient-table-wrap">
-          <table className="nutrient-table">
-            <caption>
-              Valores estimados no cardápio comparados à quantidade declarada
-              por comprimido de Centrum Adulto.
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Nutriente</th>
-                <th scope="col">Centrum Adulto</th>
-                <th scope="col">Cardápio</th>
-                <th scope="col">Cobertura estimada</th>
-              </tr>
-            </thead>
-            <tbody>
-              {centrumAdultTargets.map((target) => {
-                if (!target.key) {
-                  return (
-                    <tr key={target.name}>
-                      <th scope="row">{target.name}</th>
-                      <td>
-                        {formatAmount(target.amount)} {target.unit}
-                      </td>
-                      <td colSpan="2">Não calculado: dado ausente na base</td>
-                    </tr>
-                  );
-                }
-
-                const result = calculateNutrient(
-                  centrumDailyMenu,
-                  database,
-                  target.key,
-                );
-                const coverage = (result.amount / target.amount) * 100;
-                const estimatePrefix = result.complete ? "" : "≥ ";
-                const partialLabel = result.complete
-                  ? ""
-                  : " (parcial; faltam dados)";
-
-                return (
-                  <tr key={target.name}>
-                    <th scope="row">{target.name}</th>
-                    <td>
-                      {formatAmount(target.amount)} {target.unit}
-                    </td>
-                    <td>
-                      {estimatePrefix}
-                      {formatAmount(result.amount)} {target.unit}
-                      {partialLabel}
-                    </td>
-                    <td>
-                      {estimatePrefix}
-                      {formatAmount(coverage)}%
-                      {partialLabel}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <NutrientComparisonTable
+          targets={centrumAdultTargets}
+          database={database}
+          category="vitamins"
+          label="Vitaminas"
+        />
+        <NutrientComparisonTable
+          targets={centrumAdultMineralTargets}
+          database={database}
+          category="minerals"
+          label="Minerais"
+        />
         <p className="nutrient-footnote">
           Cálculo aproximado a partir dos perfis da{" "}
           <a href="https://www.tbca.net.br/" target="_blank" rel="noreferrer">
@@ -156,13 +197,22 @@ function VitaminSection({ database }) {
           </a>
           , por 100 g. Percentuais com “≥” somam apenas valores quantificados;
           não são uma medição completa. A base atual não inclui vitamina B5,
-          vitamina K, biotina nem os minerais da fórmula, então não é possível
-          afirmar equivalência nutricional total. Os valores do Centrum seguem
-          a{" "}
+          vitamina K, biotina, cromo, iodo, molibdênio ou cloro. O potássio do
+          rótulo aparece como 10 µg, mas sua unidade/quantidade precisa ser
+          confirmada antes de calcular a cobertura. Por isso, não é possível
+          afirmar equivalência nutricional total. Os valores do Centrum seguem a{" "}
           <a href={centrumFormulaSource} target="_blank" rel="noreferrer">
             tabela nutricional da fórmula
           </a>{" "}
-          indicada como referência.
+          indicada como referência; os minerais seguem a{" "}
+          <a
+            href={centrumMineralFormulaSource}
+            target="_blank"
+            rel="noreferrer"
+          >
+            bula consultada
+          </a>
+          .
         </p>
         <p className="health-disclaimer">
           Este exemplo é informativo e não substitui orientação profissional,

@@ -166,7 +166,7 @@ class App extends Component {
             aria-current={this.state.activePage === "vitamins" ? "page" : undefined}
             onClick={() => this.setState({ activePage: "vitamins" })}
           >
-            Vitaminas
+            Vitaminas e minerais
           </button>
         </nav>
         {this.state.activePage === "seasonal" ? (

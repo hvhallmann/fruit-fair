@@ -1,4 +1,5 @@
 import db from "./db.js";
+import { mineralProfiles, mineralUnits } from "./mineralProfiles.js";
 
 const tbcaRecordUrl = (record) =>
   `https://www.tbca.net.br/base-dados/int_composicao_alimentos.php?n0REd3kv7e86D%2BViXWYUnQ%3D%3D=${record}`;
@@ -933,7 +934,22 @@ const dbWithNutrients = db.map((item) => {
     throw new Error(`Missing vitamin profile for produce item "${item.key}".`);
   }
 
-  return { ...item, nutrients };
+  const mineralsPer100g = mineralProfiles[item.key] ?? Object.fromEntries(
+    Object.keys(mineralUnits).map((nutrient) => [nutrient, null]),
+  );
+  const mineralHighlights = Object.entries(mineralsPer100g)
+    .filter(([, amount]) => amount !== null && amount > 0)
+    .map(([nutrient, amount]) => ({
+      nutrient,
+      label: mineralUnits[nutrient].label,
+      amount,
+      unit: mineralUnits[nutrient].unit,
+    }));
+
+  return {
+    ...item,
+    nutrients: { ...nutrients, mineralsPer100g, mineralHighlights },
+  };
 });
 
 export default dbWithNutrients;

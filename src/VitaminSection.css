@@ -26,6 +26,13 @@
   font-size: clamp(1.15rem, 2.5vw, 1.4rem);
 }
 
+.nutrient-group-title {
+  margin: 1.25rem 0 0.75rem;
+  color: #23452e;
+  font-size: 1rem;
+  text-align: left;
+}
+
 .daily-meals {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
