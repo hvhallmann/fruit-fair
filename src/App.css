@@ -1,4 +1,5 @@
 .App {
+  display: flow-root;
   text-align: center;
   background-color: seashell;
 }
