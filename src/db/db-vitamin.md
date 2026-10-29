@@ -235,3 +235,38 @@ Prerender the page for search and sharing. Since this is one page hosted as a st
 One detail: the recommendations change by month. With prerendering, rebuild monthly, or use request-time SSR if the content must always be current in the first response. Also keep browser-only Firebase Analytics initialization out of the server-rendered module path.
 
 To verify the result, inspect View Page Source (not just the browser’s Elements panel) and confirm the content and metadata are present in the returned HTML.
+
+## Modernization
+
+Modernization plan
+The screenshot shows a useful, friendly idea, but the page feels crowded because the type scale, spacing, and product grid don’t form a consistent system. I’d update it in these steps:
+
+Set a clear typography scale
+
+Choose one body font stack and define reusable sizes for the page title, section headings, body copy, and product labels.
+Remove the title’s per-letter inline font sizing and color styles; style the wordmark consistently in CSS.
+Give paragraphs and headings deliberate line heights and spacing. Make product names comfortably readable on mobile.
+The main places to address this are App.jsx, App.css, and Card.css.
+Give the page a stronger structure
+
+Use a centered content area with a maximum width, rather than letting text and sections span the full viewport.
+Treat the brand and short introduction as a compact hero, then separate each seasonal recommendation group into a clearly titled section.
+Add consistent vertical spacing between the hero, headings, and product grids.
+Make the product grid responsive
+
+Replace the fixed 60px card sizing with a responsive grid that adapts to screen width.
+Standardize image dimensions and card spacing so rows feel even, and let longer product names wrap cleanly.
+Keep the current compact feel on small screens while using more columns and whitespace on larger screens.
+Refine color and component styling
+
+Keep the fresh, produce-inspired palette, but use a restrained set of coordinated colors instead of relying on the browser’s named colors and a full-page seashell background.
+Use subtle section or card surfaces to group content without making the page visually busy.
+Add consistent interactive states for clickable product cards, including hover and keyboard-focus styles.
+Polish the copy and accessibility
+
+Correct accents and wording in headings, and consider reducing the all-caps emphasis in the introduction.
+Check text contrast, mobile readability, and keyboard navigation for product tips.
+Validate the redesign at real viewport sizes
+
+Review narrow phones, larger phones, tablets, and desktop.
+Check that the product grid stays balanced, text doesn’t become too wide, and labels remain readable.

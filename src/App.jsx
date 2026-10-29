@@ -164,13 +164,13 @@ class App extends Component {
           <h2 className="section-title">
             A sugestão é levar os seguintes produtos:
           </h2>
-          <div className="container grid-xs">
+          <div className="produce-grid">
             <div className="columns-custom">{listItems}</div>
           </div>
         </section>
         <section className="season-section">
           <h2 className="section-title">Boa pedida de {previousMonthName}:</h2>
-          <div className="container grid-xs">
+          <div className="produce-grid">
             <div className="columns-custom">{secListItems}</div>
           </div>
         </section>
@@ -178,7 +178,7 @@ class App extends Component {
           <h2 className="section-title">
             Saindo do forno para {nextMonthName}!
           </h2>
-          <div className="container grid-xs">
+          <div className="produce-grid">
             <div className="columns-custom">{thirdListItems}</div>
           </div>
         </section>
@@ -187,7 +187,7 @@ class App extends Component {
           <h2 className="section-title">
             Estes você ainda consegue encontrar:
           </h2>
-          <div className="container grid-xs">
+          <div className="produce-grid">
             <div className="columns-custom">{yellowListItems}</div>
           </div>
         </section>

@@ -81,13 +81,16 @@
   color: #61dafb;
 }
 
+.produce-grid {
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
 .columns-custom {
-  display: flex;
-  display: -ms-flexbox;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  row-gap: 14px;
-  line-height: 1.4;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 4.5rem), 1fr));
+  gap: 0.75rem;
 }
 
 @keyframes App-logo-spin {
