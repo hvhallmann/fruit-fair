@@ -1,14 +1,21 @@
-import { useState } from "react";
 import {
   centrumAdultTargets,
   centrumAdultMineralTargets,
   centrumFormulaSource,
   centrumMineralFormulaSource,
-  demoUserProfile,
 } from "./db/centrumDailyMenu.js";
 import { mineralUnits } from "./db/mineralProfiles.js";
+import { demoUserProfile } from "./db/profileStorage.js";
 import { generateSeasonalDailyMenu } from "./db/seasonalMenu.js";
 import "./VitaminSection.css";
+
+const activityLabels = {
+  sedentary: "sedentário",
+  light: "leve",
+  moderate: "moderado",
+  high: "alto",
+  "very-high": "muito alto",
+};
 
 function convertAmount(amount, fromUnit, toUnit) {
   if (fromUnit === toUnit) return amount;
@@ -130,11 +137,10 @@ function NutrientComparisonTable({
   );
 }
 
-function VitaminSection({ database, monthIndex }) {
-  const [energyTargetInput, setEnergyTargetInput] = useState(
-    String(demoUserProfile.energyTargetKcal),
+function VitaminSection({ database, monthIndex, userProfile }) {
+  const parsedEnergyTarget = Number(
+    userProfile?.energyTargetKcal ?? demoUserProfile.energyTargetKcal,
   );
-  const parsedEnergyTarget = Number(energyTargetInput);
   const hasValidEnergyTarget =
     Number.isFinite(parsedEnergyTarget) && parsedEnergyTarget > 0;
   const menu = hasValidEnergyTarget
@@ -164,33 +170,25 @@ function VitaminSection({ database, monthIndex }) {
         </h3>
         <p className="daily-menu-intro">
           Itens marcados como fortes ou médios neste mês, priorizados por
-          nutrientes estimados por kcal e sazonalidade. Perfil temporário:{" "}
+          nutrientes estimados por kcal e sazonalidade. Perfil{" "}
           <strong>
-            {demoUserProfile.age} anos,{" "}
-            {formatAmount(demoUserProfile.heightCm / 100)} m,{" "}
-            {demoUserProfile.weightKg} kg
+            {userProfile?.name ? `${userProfile.name}, ` : "de demonstração: "}
+            {formatAmount(Number(userProfile?.heightCm ?? demoUserProfile.heightCm) / 100)} m,{" "}
+            {formatAmount(Number(userProfile?.weightKg ?? demoUserProfile.weightKg))} kg,
+            {" "}
+            {activityLabels[
+              userProfile?.activityLevel ?? demoUserProfile.activityLevel
+            ]}
           </strong>
-          . A meta energética foi informada manualmente, não calculada pelo
-          perfil. A seleção mantém o volume do menu anterior e reserva espaço
-          para frutas e hortaliças (até 695 g).
+          . Limite de{" "}
+          <strong>{formatAmount(parsedEnergyTarget)} kcal/dia</strong>,
+          informado no perfil. A seleção reserva espaço para frutas e
+          hortaliças (até 695 g).
         </p>
-        <div className="energy-target-control">
-          <label htmlFor="daily-energy-target">
-            Limite energético da seleção diária (kcal)
-          </label>
-          <input
-            id="daily-energy-target"
-            type="number"
-            min="1"
-            step="50"
-            value={energyTargetInput}
-            onChange={(event) => setEnergyTargetInput(event.target.value)}
-          />
-          <span>
-            Perfil de demonstração — {monthName}; 1 kcal por 100 g estimada pela
-            TBCA.
-          </span>
-        </div>
+        <p className="daily-menu-intro">
+          Mês considerado: <strong>{monthName}</strong>. A atividade não é usada
+          para recalcular a meta informada.
+        </p>
         {menuAvailable ? (
           <>
             <p className="generated-menu-summary">

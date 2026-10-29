@@ -36,15 +36,6 @@ export const centrumAdultMineralTargets = [
   { key: null, name: "Cloro", amount: 320, unit: "µg" },
 ];
 
-export const demoUserProfile = {
-  age: 30,
-  sex: "male",
-  heightCm: 180,
-  weightKg: 78,
-  activityLevel: "moderate",
-  energyTargetKcal: 2000,
-};
-
 export const centrumFormulaSource =
   "https://www.centrum.com.br/content/dam/cf-consumer-healthcare/bp-wellness-centrum/pt_BR/pdf/Tabela%20Nutricional%20Centrum%20de%20A%20a%20Zinco.pdf";
 

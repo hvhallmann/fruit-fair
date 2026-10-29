@@ -21,35 +21,6 @@
   border-top: 1px solid #e7e9df;
 }
 
-.energy-target-control {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(8rem, 10rem);
-  gap: 0.4rem 1rem;
-  align-items: center;
-  margin: 1rem 0;
-  text-align: left;
-}
-
-.energy-target-control label {
-  color: #354638;
-  font-weight: 600;
-}
-
-.energy-target-control input {
-  width: 100%;
-  padding: 0.55rem 0.7rem;
-  border: 1px solid #bdc8b9;
-  border-radius: 0.5rem;
-  color: #26352a;
-  font: inherit;
-}
-
-.energy-target-control span {
-  grid-column: 1 / -1;
-  color: #596458;
-  font-size: 0.85rem;
-}
-
 .generated-menu-summary {
   margin: 0 0 0.85rem;
   color: #4e5b4e;

@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import staticDb from "./db/dbWithNutrients.js";
 import Card from "./Card.jsx";
+import ProfileSection from "./ProfileSection.jsx";
 import VitaminSection from "./VitaminSection.jsx";
+import {
+  deleteUserProfile,
+  demoUserProfile,
+  loadUserProfile,
+  saveUserProfile,
+} from "./db/profileStorage.js";
 import "./firebase.js";
 import "./App.css";
 
@@ -14,6 +21,11 @@ class App extends Component {
     this.db = staticDb;
     this.state = {
       activePage: "seasonal",
+      userProfile: demoUserProfile,
+      profileDraft: demoUserProfile,
+      isProfileSaved: false,
+      isProfileLoading: true,
+      profileStorageError: "",
       greenCardsDataProvider: [],
       greenCardsSecTierDataProvider: [],
       greenCardsThirdTierDataProvider: [],
@@ -22,6 +34,42 @@ class App extends Component {
   }
   componentDidMount() {
     this.identifyCards(this.db);
+    loadUserProfile()
+      .then((profile) => {
+        this.setState({
+          userProfile: profile ?? demoUserProfile,
+          profileDraft: profile ?? demoUserProfile,
+          isProfileSaved: Boolean(profile),
+          isProfileLoading: false,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          isProfileLoading: false,
+          profileStorageError: error.message,
+        });
+      });
+  }
+  handleProfileChange = (userProfile) => {
+    this.setState({ profileDraft: userProfile });
+  };
+  handleProfileSave = async (userProfile) => {
+    await saveUserProfile(userProfile);
+    this.setState({
+      userProfile,
+      profileDraft: userProfile,
+      isProfileSaved: true,
+      profileStorageError: "",
+    });
+  };
+  handleProfileDelete = async () => {
+    await deleteUserProfile();
+    this.setState({
+      userProfile: demoUserProfile,
+      profileDraft: demoUserProfile,
+      isProfileSaved: false,
+      profileStorageError: "",
+    });
   }
   getPreviousMonth(currentMonth) {
     let previousMouth = currentMonth - 1;
@@ -163,6 +211,14 @@ class App extends Component {
           <button
             type="button"
             className="page-tab"
+            aria-current={this.state.activePage === "profile" ? "page" : undefined}
+            onClick={() => this.setState({ activePage: "profile" })}
+          >
+            Meu perfil
+          </button>
+          <button
+            type="button"
+            className="page-tab"
             aria-current={this.state.activePage === "vitamins" ? "page" : undefined}
             onClick={() => this.setState({ activePage: "vitamins" })}
           >
@@ -215,10 +271,21 @@ class App extends Component {
               </div>
             </section>
           </div>
+        ) : this.state.activePage === "profile" ? (
+          <ProfileSection
+            profile={this.state.profileDraft}
+            isLoading={this.state.isProfileLoading}
+            isSaved={this.state.isProfileSaved}
+            storageError={this.state.profileStorageError}
+            onChange={this.handleProfileChange}
+            onSave={this.handleProfileSave}
+            onDelete={this.handleProfileDelete}
+          />
         ) : (
           <VitaminSection
             database={this.db}
             monthIndex={currentMonth}
+            userProfile={this.state.userProfile}
           />
         )}
       </main>

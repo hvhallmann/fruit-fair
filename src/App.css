@@ -51,6 +51,7 @@
 .page-tabs {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: clamp(1.5rem, 4vw, 2rem);
   padding-bottom: 1rem;

@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import App from "./App";
 import Card from "./Card";
@@ -7,9 +7,28 @@ import staticDb from "./db/dbWithNutrients.js";
 import {
   centrumAdultTargets,
   centrumAdultMineralTargets,
-  demoUserProfile,
 } from "./db/centrumDailyMenu.js";
 import { generateSeasonalDailyMenu } from "./db/seasonalMenu.js";
+import {
+  deleteUserProfile,
+  demoUserProfile,
+  loadUserProfile,
+  saveUserProfile,
+} from "./db/profileStorage.js";
+
+vi.mock("./db/profileStorage.js", () => ({
+  deleteUserProfile: vi.fn().mockResolvedValue(undefined),
+  demoUserProfile: {
+    name: "",
+    heightCm: 180,
+    weightKg: 78,
+    email: "",
+    energyTargetKcal: 2000,
+    activityLevel: "moderate",
+  },
+  loadUserProfile: vi.fn().mockResolvedValue(null),
+  saveUserProfile: vi.fn().mockResolvedValue(undefined),
+}));
 
 function estimatedNutrient(menu, database, nutrientKey, category, targetUnit) {
   const mineralUnit =
@@ -42,9 +61,17 @@ function formatExpectedAmount(amount) {
   }).format(amount);
 }
 
+async function renderApp() {
+  const result = render(<App />);
+  await act(async () => {
+    await Promise.resolve();
+  });
+  return result;
+}
+
 describe("Feira da Fruta App", () => {
-  it("loads the initial page and renders produce cards with images", () => {
-    const { container } = render(<App />);
+  it("loads the initial page and renders produce cards with images", async () => {
+    const { container } = await renderApp();
 
     // Verify introductory section is present
     expect(
@@ -65,16 +92,16 @@ describe("Feira da Fruta App", () => {
     expect(firstImage).toHaveAttribute("alt");
   });
 
-  it("uses a main landmark and a single top-level heading", () => {
-    render(<App />);
+  it("uses a main landmark and a single top-level heading", async () => {
+    await renderApp();
 
     expect(screen.getByRole("main")).toBeInTheDocument();
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getAllByRole("heading", { level: 2 })).not.toHaveLength(0);
   });
 
-  it("switches between seasonal produce and the vitamins and minerals information", () => {
-    render(<App />);
+  it("switches between seasonal produce and the vitamins and minerals information", async () => {
+    await renderApp();
 
     fireEvent.click(screen.getByRole("button", { name: "Vitaminas e minerais" }));
 
@@ -96,13 +123,10 @@ describe("Feira da Fruta App", () => {
           element.textContent.includes("78 kg"),
       ),
     ).toBeInTheDocument();
-    expect(
-      screen.getByLabelText("Limite energético da seleção diária (kcal)"),
-    ).toHaveValue(2000);
     const currentMenu = generateSeasonalDailyMenu(
       staticDb,
       new Date().getMonth(),
-      2000,
+      demoUserProfile.energyTargetKcal,
     );
     expect(
       screen.getByRole("table", {
@@ -173,29 +197,12 @@ describe("Feira da Fruta App", () => {
     expect(potassiumRow).toHaveTextContent("10 µg");
     expect(potassiumRow).toHaveTextContent("precisa ser confirmada");
 
-    const energyInput = screen.getByLabelText(
-      "Limite energético da seleção diária (kcal)",
-    );
     const lowerBudgetMenu = generateSeasonalDailyMenu(
       staticDb,
       new Date().getMonth(),
       500,
     );
-    fireEvent.change(energyInput, { target: { value: "500" } });
-    expect(screen.getAllByRole("listitem")).toHaveLength(
-      lowerBudgetMenu.meals.flatMap((meal) => meal.foods).length,
-    );
-    expect(screen.getByText(/500 kcal disponíveis/)).toBeInTheDocument();
-
-    fireEvent.change(energyInput, { target: { value: "0" } });
-    expect(screen.getByRole("alert")).toHaveTextContent(
-      "Informe um limite energético maior que zero",
-    );
-    expect(
-      screen.queryByRole("table", {
-        name: /Valores estimados no cardápio comparados.*vitaminas/,
-      }),
-    ).toBeNull();
+    expect(lowerBudgetMenu.energyKcal).toBeLessThanOrEqual(500);
 
     fireEvent.click(screen.getByRole("button", { name: "Feira do mês" }));
 
@@ -259,6 +266,46 @@ describe("Feira da Fruta App", () => {
         .filter((target) => target.key === null)
         .map((target) => target.name),
     ).toEqual(["Cromo", "Iodo", "Molibdênio", "Cloro"]);
+  });
+
+  it("saves profile inputs in local browser storage and can clear them", async () => {
+    loadUserProfile.mockResolvedValueOnce(null);
+    saveUserProfile.mockResolvedValueOnce(undefined);
+    deleteUserProfile.mockResolvedValueOnce(undefined);
+
+    await renderApp();
+    fireEvent.click(screen.getByRole("button", { name: "Meu perfil" }));
+
+    const nameInput = await screen.findByLabelText("Nome");
+    fireEvent.change(nameInput, { target: { value: "Ana" } });
+    fireEvent.change(screen.getByLabelText("E-mail (opcional)"), {
+      target: { value: "ana@example.com" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Salvar neste dispositivo" }));
+
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Perfil salvo neste dispositivo.",
+    );
+    expect(saveUserProfile).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "Ana",
+        email: "ana@example.com",
+        heightCm: 180,
+        weightKg: 78,
+        energyTargetKcal: 2000,
+        activityLevel: "moderate",
+      }),
+    );
+    expect(
+      screen.getByText(/não envia os dados do perfil ao Firebase/i),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Apagar dados locais" }));
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Perfil local apagado.",
+    );
+    expect(deleteUserProfile).toHaveBeenCalledTimes(1);
   });
 
   it("provides sourced vitamin and mineral profiles for produce items", () => {
