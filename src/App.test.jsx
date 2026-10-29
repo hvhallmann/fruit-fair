@@ -12,6 +12,7 @@ import { generateSeasonalDailyMenu } from "./db/seasonalMenu.js";
 import {
   deleteUserProfile,
   demoUserProfile,
+  emptyUserProfile,
   loadUserProfile,
   saveUserProfile,
 } from "./db/profileStorage.js";
@@ -25,6 +26,14 @@ vi.mock("./db/profileStorage.js", () => ({
     email: "",
     energyTargetKcal: 2000,
     activityLevel: "moderate",
+  },
+  emptyUserProfile: {
+    name: "",
+    heightCm: "",
+    weightKg: "",
+    email: "",
+    energyTargetKcal: "",
+    activityLevel: "",
   },
   loadUserProfile: vi.fn().mockResolvedValue(null),
   saveUserProfile: vi.fn().mockResolvedValue(undefined),
@@ -278,6 +287,19 @@ describe("Feira da Fruta App", () => {
 
     const nameInput = await screen.findByLabelText("Nome");
     fireEvent.change(nameInput, { target: { value: "Ana" } });
+    fireEvent.change(screen.getByLabelText("Altura (cm)"), {
+      target: { value: "180" },
+    });
+    fireEvent.change(screen.getByLabelText("Peso (kg)"), {
+      target: { value: "78" },
+    });
+    fireEvent.change(
+      screen.getByLabelText("Necessidade energética estimada (kcal/dia)"),
+      { target: { value: "2000" } },
+    );
+    fireEvent.change(screen.getByLabelText("Nível de atividade"), {
+      target: { value: "moderate" },
+    });
     fireEvent.change(screen.getByLabelText("E-mail (opcional)"), {
       target: { value: "ana@example.com" },
     });
@@ -306,6 +328,21 @@ describe("Feira da Fruta App", () => {
       "Perfil local apagado.",
     );
     expect(deleteUserProfile).toHaveBeenCalledTimes(1);
+    expect(screen.getByLabelText("Nome")).toHaveValue("");
+    expect(screen.getByLabelText("Altura (cm)")).toHaveValue(null);
+    expect(screen.getByLabelText("Peso (kg)")).toHaveValue(null);
+    expect(
+      screen.getByLabelText("Necessidade energética estimada (kcal/dia)"),
+    ).toHaveValue(null);
+    expect(screen.queryByRole("button", { name: "Apagar dados locais" })).toBeNull();
+    expect(emptyUserProfile).toMatchObject({
+      name: "",
+      heightCm: "",
+      weightKg: "",
+      email: "",
+      energyTargetKcal: "",
+      activityLevel: "",
+    });
   });
 
   it("provides sourced vitamin and mineral profiles for produce items", () => {

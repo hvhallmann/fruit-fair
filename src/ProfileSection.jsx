@@ -13,6 +13,7 @@ function ProfileSection({
   profile,
   isLoading,
   isSaved,
+  isSaving: isSavingParent = false,
   storageError,
   onChange,
   onSave,
@@ -158,6 +159,9 @@ function ProfileSection({
               value={profile.activityLevel}
               onChange={handleChange}
             >
+              <option value="" disabled>
+                Selecione o nível de atividade
+              </option>
               {activityLevels.map((level) => (
                 <option key={level.value} value={level.value}>
                   {level.label}
@@ -167,13 +171,15 @@ function ProfileSection({
           </label>
           <div className="profile-actions">
             <button type="submit" disabled={isSaving}>
-              {isSaving ? "Salvando…" : "Salvar neste dispositivo"}
+              {isSaving || isSavingParent
+                ? "Salvando…"
+                : "Salvar neste dispositivo"}
             </button>
             {isSaved && (
               <button
                 type="button"
                 className="profile-delete-button"
-                disabled={isSaving}
+                disabled={isSaving || isSavingParent}
                 onClick={handleDelete}
               >
                 Apagar dados locais

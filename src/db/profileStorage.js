@@ -12,6 +12,15 @@ export const demoUserProfile = {
   activityLevel: "moderate",
 };
 
+export const emptyUserProfile = {
+  name: "",
+  heightCm: "",
+  weightKg: "",
+  email: "",
+  energyTargetKcal: "",
+  activityLevel: "",
+};
+
 function openProfileDatabase() {
   if (!globalThis.indexedDB) {
     return Promise.reject(

@@ -6,6 +6,7 @@ import VitaminSection from "./VitaminSection.jsx";
 import {
   deleteUserProfile,
   demoUserProfile,
+  emptyUserProfile,
   loadUserProfile,
   saveUserProfile,
 } from "./db/profileStorage.js";
@@ -22,7 +23,7 @@ class App extends Component {
     this.state = {
       activePage: "seasonal",
       userProfile: demoUserProfile,
-      profileDraft: demoUserProfile,
+      profileDraft: emptyUserProfile,
       isProfileSaved: false,
       isProfileLoading: true,
       profileStorageError: "",
@@ -38,7 +39,7 @@ class App extends Component {
       .then((profile) => {
         this.setState({
           userProfile: profile ?? demoUserProfile,
-          profileDraft: profile ?? demoUserProfile,
+          profileDraft: profile ?? emptyUserProfile,
           isProfileSaved: Boolean(profile),
           isProfileLoading: false,
         });
@@ -66,7 +67,7 @@ class App extends Component {
     await deleteUserProfile();
     this.setState({
       userProfile: demoUserProfile,
-      profileDraft: demoUserProfile,
+      profileDraft: emptyUserProfile,
       isProfileSaved: false,
       profileStorageError: "",
     });
