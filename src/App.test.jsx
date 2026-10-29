@@ -4,6 +4,10 @@ import React from "react";
 import App from "./App";
 import Card from "./Card";
 import staticDb from "./db/dbWithNutrients.js";
+import {
+  centrumAdultTargets,
+  centrumDailyMenu,
+} from "./db/centrumDailyMenu.js";
 
 describe("Feira da Fruta App", () => {
   it("loads the initial page and renders produce cards with images", () => {
@@ -45,8 +49,31 @@ describe("Feira da Fruta App", () => {
       screen.getByRole("heading", { name: "Vitaminas nos alimentos in natura" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/5 a 8 porções diárias variadas/),
+      screen.getByRole("heading", {
+        name: "Exemplo de cardápio diário com itens da sua base",
+      }),
     ).toBeInTheDocument();
+    expect(screen.getByText("695 g")).toBeInTheDocument();
+    expect(
+      screen.getByRole("table", {
+        name: /Valores estimados no cardápio comparados/,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/não é possível afirmar equivalência nutricional total/),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("row", { name: /Vitamina C/ })).toHaveTextContent(
+      "282,3 mg",
+    );
+    expect(screen.getByRole("row", { name: /Vitamina C/ })).toHaveTextContent(
+      "627,4%",
+    );
+    expect(
+      screen.getByRole("rowheader", { name: "Vitamina B1" }).closest("tr"),
+    ).toHaveTextContent("parcial; faltam dados");
+    expect(
+      screen.getByRole("rowheader", { name: "Vitamina B5" }).closest("tr"),
+    ).toHaveTextContent("Não calculado: dado ausente na base");
     expect(screen.getByRole("button", { name: "Vitaminas" })).toHaveAttribute(
       "aria-current",
       "page",
@@ -57,7 +84,26 @@ describe("Feira da Fruta App", () => {
     expect(
       screen.getByText(/A sugestão é levar os seguintes produtos/i),
     ).toBeInTheDocument();
-    expect(screen.queryByText(/5 a 8 porções diárias variadas/)).toBeNull();
+    expect(
+      screen.queryByRole("heading", {
+        name: "Exemplo de cardápio diário com itens da sua base",
+      }),
+    ).toBeNull();
+  });
+
+  it("defines a one-day menu and Centrum targets without implying unsupported nutrients", () => {
+    const menuFoods = centrumDailyMenu.flatMap((meal) => meal.foods);
+    const menuWeight = menuFoods.reduce((total, food) => total + food.grams, 0);
+
+    expect(menuWeight).toBe(695);
+    expect(menuFoods.every((food) => staticDb.some((item) => item.key === food.key)))
+      .toBe(true);
+    expect(centrumAdultTargets).toHaveLength(13);
+    expect(
+      centrumAdultTargets
+        .filter((target) => target.key === null)
+        .map((target) => target.name),
+    ).toEqual(["Vitamina B5", "Vitamina K", "Biotina"]);
   });
 
   it("provides sourced vitamin profiles for produce items", () => {

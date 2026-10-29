@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import staticDb from "./db/dbWithNutrients.js";
 import Card from "./Card.jsx";
+import VitaminSection from "./VitaminSection.jsx";
 import "./firebase.js";
 import "./App.css";
 
@@ -215,19 +216,7 @@ class App extends Component {
             </section>
           </div>
         ) : (
-          <section className="vitamins-panel" aria-labelledby="vitamins-title">
-            <h2 className="section-title" id="vitamins-title">
-              Vitaminas nos alimentos in natura
-            </h2>
-            <p className="vitamins-copy">
-              Para atingir em alimentos in natura a mesma densidade nutricional
-              de 1 comprimido multivitamínico como o Centrum Adulto, uma pessoa
-              precisaria consumir em média de{" "}
-              <strong>5 a 8 porções diárias variadas</strong> de alimentos da
-              sua lista (o equivalente a cerca de{" "}
-              <strong>500 g a 800 g de frutas e hortaliças por dia</strong>).
-            </p>
-          </section>
+          <VitaminSection database={this.db} />
         )}
       </main>
     );
