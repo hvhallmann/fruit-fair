@@ -216,7 +216,10 @@ class App extends Component {
             </section>
           </div>
         ) : (
-          <VitaminSection database={this.db} />
+          <VitaminSection
+            database={this.db}
+            monthIndex={currentMonth}
+          />
         )}
       </main>
     );

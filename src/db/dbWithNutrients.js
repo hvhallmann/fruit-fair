@@ -1,4 +1,5 @@
 import db from "./db.js";
+import energyProfiles from "./energyProfiles.js";
 import { mineralProfiles, mineralUnits } from "./mineralProfiles.js";
 
 const tbcaRecordUrl = (record) =>
@@ -948,7 +949,12 @@ const dbWithNutrients = db.map((item) => {
 
   return {
     ...item,
-    nutrients: { ...nutrients, mineralsPer100g, mineralHighlights },
+    nutrients: {
+      ...nutrients,
+      mineralsPer100g,
+      mineralHighlights,
+      energyKcalPer100g: energyProfiles[item.key] ?? null,
+    },
   };
 });
 

@@ -1,11 +1,13 @@
+import { useState } from "react";
 import {
   centrumAdultTargets,
   centrumAdultMineralTargets,
-  centrumDailyMenu,
   centrumFormulaSource,
   centrumMineralFormulaSource,
+  demoUserProfile,
 } from "./db/centrumDailyMenu.js";
 import { mineralUnits } from "./db/mineralProfiles.js";
+import { generateSeasonalDailyMenu } from "./db/seasonalMenu.js";
 import "./VitaminSection.css";
 
 function convertAmount(amount, fromUnit, toUnit) {
@@ -47,7 +49,13 @@ function formatAmount(amount) {
   }).format(amount);
 }
 
-function NutrientComparisonTable({ targets, database, category, label }) {
+function NutrientComparisonTable({
+  targets,
+  database,
+  menu,
+  category,
+  label,
+}) {
   return (
     <>
       <h4 className="nutrient-group-title">{label}</h4>
@@ -84,7 +92,7 @@ function NutrientComparisonTable({ targets, database, category, label }) {
               }
 
               const result = calculateNutrient(
-                centrumDailyMenu,
+                menu,
                 database,
                 target.key,
                 category,
@@ -122,12 +130,21 @@ function NutrientComparisonTable({ targets, database, category, label }) {
   );
 }
 
-function VitaminSection({ database }) {
-  const totalGrams = centrumDailyMenu.reduce(
-    (total, meal) =>
-      total + meal.foods.reduce((mealTotal, food) => mealTotal + food.grams, 0),
-    0,
+function VitaminSection({ database, monthIndex }) {
+  const [energyTargetInput, setEnergyTargetInput] = useState(
+    String(demoUserProfile.energyTargetKcal),
   );
+  const parsedEnergyTarget = Number(energyTargetInput);
+  const hasValidEnergyTarget =
+    Number.isFinite(parsedEnergyTarget) && parsedEnergyTarget > 0;
+  const menu = hasValidEnergyTarget
+    ? generateSeasonalDailyMenu(database, monthIndex, parsedEnergyTarget)
+    : { meals: [], totalGrams: 0, energyKcal: 0 };
+  const menuAvailable = hasValidEnergyTarget && menu.meals.length > 0;
+  const monthName = new Intl.DateTimeFormat("pt-BR", {
+    month: "long",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(2024, monthIndex, 1)));
 
   return (
     <section className="vitamins-panel" aria-labelledby="vitamins-title">
@@ -146,79 +163,134 @@ function VitaminSection({ database }) {
           Exemplo de cardápio diário com itens da sua base
         </h3>
         <p className="daily-menu-intro">
-          Porções ilustrativas, pesadas pela parte comestível. O total é de{" "}
-          <strong>{totalGrams} g</strong> de frutas e hortaliças.
+          Itens marcados como fortes ou médios neste mês, priorizados por
+          nutrientes estimados por kcal e sazonalidade. Perfil temporário:{" "}
+          <strong>
+            {demoUserProfile.age} anos,{" "}
+            {formatAmount(demoUserProfile.heightCm / 100)} m,{" "}
+            {demoUserProfile.weightKg} kg
+          </strong>
+          . A meta energética foi informada manualmente, não calculada pelo
+          perfil. A seleção mantém o volume do menu anterior e reserva espaço
+          para frutas e hortaliças (até 695 g).
         </p>
-        <div className="daily-meals">
-          {centrumDailyMenu.map((meal) => (
-            <section className="daily-meal" key={meal.meal}>
-              <h4>{meal.meal}</h4>
-              <ul>
-                {meal.foods.map((food) => {
-                  const produce = database.find((item) => item.key === food.key);
-                  return (
-                    <li key={food.key}>
-                      <span>{food.portion}</span>
-                      <strong>
-                        {produce?.name || food.key} — {food.grams} g
-                      </strong>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          ))}
+        <div className="energy-target-control">
+          <label htmlFor="daily-energy-target">
+            Limite energético da seleção diária (kcal)
+          </label>
+          <input
+            id="daily-energy-target"
+            type="number"
+            min="1"
+            step="50"
+            value={energyTargetInput}
+            onChange={(event) => setEnergyTargetInput(event.target.value)}
+          />
+          <span>
+            Perfil de demonstração — {monthName}; 1 kcal por 100 g estimada pela
+            TBCA.
+          </span>
         </div>
+        {menuAvailable ? (
+          <>
+            <p className="generated-menu-summary">
+              Seleção: <strong>{menu.totalGrams} g</strong> de até 695 g e{" "}
+              <strong>{formatAmount(menu.energyKcal)} kcal</strong> de{" "}
+              {formatAmount(parsedEnergyTarget)} kcal disponíveis.
+            </p>
+            <div className="daily-meals">
+              {menu.meals.map((meal) => (
+                <section className="daily-meal" key={meal.meal}>
+                  <h4>{meal.meal}</h4>
+                  <ul>
+                    {meal.foods.map((food) => (
+                      <li key={food.key}>
+                        <span>{food.portion}</span>
+                        <strong>
+                          {food.name} — {food.grams} g (~
+                          {formatAmount(food.energyKcal)} kcal)
+                        </strong>
+                        <span className="seasonal-priority">
+                          {food.season === "Forte"
+                            ? "Pico da estação"
+                            : "Em época"}
+                        </span>
+                        {food.densityRank <= 3 && (
+                          <span className="density-highlight">
+                            Alta prioridade por densidade de nutrientes/kcal (#
+                            {food.densityRank})
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p role="alert" className="generated-menu-summary">
+            {hasValidEnergyTarget
+              ? "Não há itens sazonais com dados energéticos disponíveis para esse limite."
+              : "Informe um limite energético maior que zero para gerar a seleção."}
+          </p>
+        )}
       </section>
 
-      <section
-        className="nutrient-comparison"
-        aria-labelledby="nutrient-comparison-title"
-      >
-        <h3 className="section-title" id="nutrient-comparison-title">
-          Estimativa em relação à fórmula
-        </h3>
-        <NutrientComparisonTable
-          targets={centrumAdultTargets}
-          database={database}
-          category="vitamins"
-          label="Vitaminas"
-        />
-        <NutrientComparisonTable
-          targets={centrumAdultMineralTargets}
-          database={database}
-          category="minerals"
-          label="Minerais"
-        />
-        <p className="nutrient-footnote">
-          Cálculo aproximado a partir dos perfis da{" "}
-          <a href="https://www.tbca.net.br/" target="_blank" rel="noreferrer">
-            Tabela Brasileira de Composição de Alimentos (TBCA)
-          </a>
-          , por 100 g. Percentuais com “≥” somam apenas valores quantificados;
-          não são uma medição completa. A base atual não inclui vitamina B5,
-          vitamina K, biotina, cromo, iodo, molibdênio ou cloro. O potássio do
-          rótulo aparece como 10 µg, mas sua unidade/quantidade precisa ser
-          confirmada antes de calcular a cobertura. Por isso, não é possível
-          afirmar equivalência nutricional total. Os valores do Centrum seguem a{" "}
-          <a href={centrumFormulaSource} target="_blank" rel="noreferrer">
-            tabela nutricional da fórmula
-          </a>{" "}
-          indicada como referência; os minerais seguem a{" "}
-          <a
-            href={centrumMineralFormulaSource}
-            target="_blank"
-            rel="noreferrer"
-          >
-            bula consultada
-          </a>
-          .
-        </p>
-        <p className="health-disclaimer">
-          Este exemplo é informativo e não substitui orientação profissional,
-          avaliação de deficiências ou uso de suplemento prescrito.
-        </p>
-      </section>
+      {menuAvailable && (
+        <section
+          className="nutrient-comparison"
+          aria-labelledby="nutrient-comparison-title"
+        >
+          <h3 className="section-title" id="nutrient-comparison-title">
+            Estimativa em relação à fórmula
+          </h3>
+          <NutrientComparisonTable
+            targets={centrumAdultTargets}
+            database={database}
+            menu={menu.meals}
+            category="vitamins"
+            label="Vitaminas"
+          />
+          <NutrientComparisonTable
+            targets={centrumAdultMineralTargets}
+            database={database}
+            menu={menu.meals}
+            category="minerals"
+            label="Minerais"
+          />
+          <p className="nutrient-footnote">
+            Cálculo aproximado a partir dos perfis da{" "}
+            <a href="https://www.tbca.net.br/" target="_blank" rel="noreferrer">
+              Tabela Brasileira de Composição de Alimentos (TBCA)
+            </a>
+            , por 100 g. Percentuais com “≥” somam apenas valores quantificados;
+            não são uma medição completa. A base atual não inclui vitamina B5,
+            vitamina K, biotina, cromo, iodo, molibdênio ou cloro. O potássio do
+            rótulo aparece como 10 µg, mas sua unidade/quantidade precisa ser
+            confirmada antes de calcular a cobertura. Por isso, não é possível
+            afirmar equivalência nutricional total. A estimativa energética e os
+            perfis de nutrientes são valores médios da TBCA; a seleção é apenas
+            ilustrativa, não uma dieta completa. Os valores do Centrum seguem a{" "}
+            <a href={centrumFormulaSource} target="_blank" rel="noreferrer">
+              tabela nutricional da fórmula
+            </a>{" "}
+            indicada como referência; os minerais seguem a{" "}
+            <a
+              href={centrumMineralFormulaSource}
+              target="_blank"
+              rel="noreferrer"
+            >
+              bula consultada
+            </a>
+            .
+          </p>
+          <p className="health-disclaimer">
+            Este exemplo é informativo e não substitui orientação profissional,
+            avaliação de deficiências ou uso de suplemento prescrito.
+          </p>
+        </section>
+      )}
     </section>
   );
 }

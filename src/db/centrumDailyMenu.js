@@ -36,31 +36,14 @@ export const centrumAdultMineralTargets = [
   { key: null, name: "Cloro", amount: 320, unit: "µg" },
 ];
 
-export const centrumDailyMenu = [
-  {
-    meal: "Café da manhã",
-    foods: [
-      { key: "goiaba", portion: "1 goiaba média", grams: 100 },
-      { key: "banana", portion: "1 banana pequena", grams: 100 },
-    ],
-  },
-  {
-    meal: "Almoço",
-    foods: [
-      { key: "espinafre", portion: "1 xícara de folhas cruas", grams: 30 },
-      { key: "brocolis", portion: "1 xícara picado", grams: 90 },
-      { key: "cenoura", portion: "1/2 cenoura média", grams: 50 },
-      { key: "tomate", portion: "1 tomate médio", grams: 100 },
-    ],
-  },
-  {
-    meal: "Lanche",
-    foods: [
-      { key: "mamao-formosa", portion: "1 fatia de mamão Formosa", grams: 150 },
-      { key: "abacate", portion: "1/4 de abacate médio", grams: 75 },
-    ],
-  },
-];
+export const demoUserProfile = {
+  age: 30,
+  sex: "male",
+  heightCm: 180,
+  weightKg: 78,
+  activityLevel: "moderate",
+  energyTargetKcal: 2000,
+};
 
 export const centrumFormulaSource =
   "https://www.centrum.com.br/content/dam/cf-consumer-healthcare/bp-wellness-centrum/pt_BR/pdf/Tabela%20Nutricional%20Centrum%20de%20A%20a%20Zinco.pdf";
