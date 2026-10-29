@@ -1,7 +1,64 @@
 .App {
-  display: flow-root;
+  box-sizing: border-box;
+  width: min(100% - 2rem, 68rem);
+  margin: clamp(1rem, 4vw, 3rem) auto;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border: 1px solid #e7e9df;
+  border-radius: 1.25rem;
+  background-color: #fffefa;
+  box-shadow: 0 1rem 2.5rem rgb(45 61 39 / 7%);
   text-align: center;
-  background-color: seashell;
+}
+
+.page-header {
+  max-width: 46rem;
+  margin: 0 auto clamp(2rem, 5vw, 3rem);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.15em 0.3em;
+  margin: 0 0 1.25rem;
+  color: #23452e;
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  font-weight: 750;
+  letter-spacing: 0.045em;
+  line-height: 1.1;
+}
+
+.brand-word-accent {
+  color: #b35335;
+}
+
+.brand-connector {
+  color: #697766;
+  font-size: 0.44em;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.intro-copy {
+  margin: 0 auto;
+  color: #4e5b4e;
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.7;
+}
+
+.season-section {
+  padding: clamp(1.25rem, 3vw, 2rem) 0;
+  border-top: 1px solid #e7e9df;
+}
+
+.section-title {
+  max-width: 40rem;
+  margin: 0 auto 1.25rem;
+  color: #23452e;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  font-weight: 650;
+  line-height: 1.35;
 }
 
 .App-logo {
@@ -30,7 +87,7 @@
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   row-gap: 14px;
-  line-height: 1;
+  line-height: 1.4;
 }
 
 @keyframes App-logo-spin {
