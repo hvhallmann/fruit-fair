@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import staticDb from "./db/db.js";
+import staticDb from "./db/dbWithNutrients.js";
 import Card from "./Card.jsx";
 import "./firebase.js";
 import "./App.css";
@@ -12,6 +12,7 @@ class App extends Component {
     super(props);
     this.db = staticDb;
     this.state = {
+      activePage: "seasonal",
       greenCardsDataProvider: [],
       greenCardsSecTierDataProvider: [],
       greenCardsThirdTierDataProvider: [],
@@ -148,49 +149,86 @@ class App extends Component {
             <span className="brand-connector">da</span>
             <span className="brand-word brand-word-accent">FRUTA</span>
           </h1>
-          <p className="intro-copy">
-            A sazonalidade é uma característica natural de todos os vegetais e
-            plantas. É relacionada à época em que o cultivo rende frutos
-            naturalmente, sendo colhidos exatamente no tempo certo e nas
-            condições climáticas ideais, o que proporciona um sabor melhor,
-            principalmente nas frutas. Além disso, esses alimentos costumam
-            apresentar preço mais acessível e são bem mais saudáveis em termos
-            de concentração de nutrientes e uso reduzido de agrotóxicos. Por
-            isso, veja quais opções temos HOJE para você escolher na hora de ir
-            à feira:
-          </p>
         </header>
-        <section className="season-section">
-          <h2 className="section-title">
-            A sugestão é levar os seguintes produtos:
-          </h2>
-          <div className="produce-grid">
-            <div className="columns-custom">{listItems}</div>
+        <nav className="page-tabs" aria-label="Navegação principal">
+          <button
+            type="button"
+            className="page-tab"
+            aria-current={this.state.activePage === "seasonal" ? "page" : undefined}
+            onClick={() => this.setState({ activePage: "seasonal" })}
+          >
+            Feira do mês
+          </button>
+          <button
+            type="button"
+            className="page-tab"
+            aria-current={this.state.activePage === "vitamins" ? "page" : undefined}
+            onClick={() => this.setState({ activePage: "vitamins" })}
+          >
+            Vitaminas
+          </button>
+        </nav>
+        {this.state.activePage === "seasonal" ? (
+          <div>
+            <p className="intro-copy">
+              A sazonalidade é uma característica natural de todos os vegetais e
+              plantas. É relacionada à época em que o cultivo rende frutos
+              naturalmente, sendo colhidos exatamente no tempo certo e nas
+              condições climáticas ideais, o que proporciona um sabor melhor,
+              principalmente nas frutas. Além disso, esses alimentos costumam
+              apresentar preço mais acessível e são bem mais saudáveis em termos
+              de concentração de nutrientes e uso reduzido de agrotóxicos. Por
+              isso, veja quais opções temos HOJE para você escolher na hora de
+              ir à feira:
+            </p>
+            <section className="season-section">
+              <h2 className="section-title">
+                A sugestão é levar os seguintes produtos:
+              </h2>
+              <div className="produce-grid">
+                <div className="columns-custom">{listItems}</div>
+              </div>
+            </section>
+            <section className="season-section">
+              <h2 className="section-title">
+                Boa pedida de {previousMonthName}:
+              </h2>
+              <div className="produce-grid">
+                <div className="columns-custom">{secListItems}</div>
+              </div>
+            </section>
+            <section className="season-section">
+              <h2 className="section-title">
+                Saindo do forno para {nextMonthName}!
+              </h2>
+              <div className="produce-grid">
+                <div className="columns-custom">{thirdListItems}</div>
+              </div>
+            </section>
+            <section className="season-section">
+              <h2 className="section-title">
+                Estes você ainda consegue encontrar:
+              </h2>
+              <div className="produce-grid">
+                <div className="columns-custom">{yellowListItems}</div>
+              </div>
+            </section>
           </div>
-        </section>
-        <section className="season-section">
-          <h2 className="section-title">Boa pedida de {previousMonthName}:</h2>
-          <div className="produce-grid">
-            <div className="columns-custom">{secListItems}</div>
-          </div>
-        </section>
-        <section className="season-section">
-          <h2 className="section-title">
-            Saindo do forno para {nextMonthName}!
-          </h2>
-          <div className="produce-grid">
-            <div className="columns-custom">{thirdListItems}</div>
-          </div>
-        </section>
-
-        <section className="season-section">
-          <h2 className="section-title">
-            Estes você ainda consegue encontrar:
-          </h2>
-          <div className="produce-grid">
-            <div className="columns-custom">{yellowListItems}</div>
-          </div>
-        </section>
+        ) : (
+          <section className="vitamins-panel" aria-labelledby="vitamins-title">
+            <h2 className="section-title" id="vitamins-title">
+              Vitaminas nos alimentos in natura
+            </h2>
+            <p className="vitamins-copy">
+              Para atingir em alimentos in natura a mesma densidade nutricional
+              de 1 comprimido multivitamínico como o Centrum Adulto, uma pessoa
+              precisaria consumir em média de{" "}
+              <strong>5 a 8 porções diárias variadas</strong> de alimentos da
+              sua lista (o equivalente a cerca de{" "}
+              <strong>500 g a 800 g de frutas e hortaliças por dia</strong>).
+            </p>
+          </section>
+        )}
       </main>
     );
   }

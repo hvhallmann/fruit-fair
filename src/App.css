@@ -12,7 +12,7 @@
 
 .page-header {
   max-width: 46rem;
-  margin: 0 auto clamp(2rem, 5vw, 3rem);
+  margin: 0 auto 1.5rem;
 }
 
 .brand {
@@ -41,6 +41,51 @@
 }
 
 .intro-copy {
+  max-width: 46rem;
+  margin: 0 auto clamp(1.5rem, 4vw, 2rem);
+  color: #4e5b4e;
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.7;
+}
+
+.page-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e7e9df;
+}
+
+.page-tab {
+  padding: 0.6rem 1rem;
+  border: 1px solid #dfe5d9;
+  border-radius: 999px;
+  background: #fff;
+  color: #435144;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.page-tab[aria-current="page"] {
+  border-color: #23452e;
+  background: #23452e;
+  color: #fff;
+}
+
+.page-tab:focus-visible {
+  outline: 2px solid #14532d;
+  outline-offset: 3px;
+}
+
+.vitamins-panel {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 2rem) 0;
+}
+
+.vitamins-copy {
   margin: 0 auto;
   color: #4e5b4e;
   font-size: clamp(1rem, 1.5vw, 1.125rem);
