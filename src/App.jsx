@@ -10,6 +10,11 @@ import {
   loadUserProfile,
   saveUserProfile,
 } from "./db/profileStorage.js";
+import {
+  deleteCloudUserProfile,
+  loadCloudUserProfile,
+  saveCloudUserProfile,
+} from "./db/cloudProfileStorage.js";
 import "./firebase.js";
 import "./App.css";
 
@@ -27,6 +32,7 @@ class App extends Component {
       isProfileSaved: false,
       isProfileLoading: true,
       profileStorageError: "",
+      profileMigrationPending: false,
       greenCardsDataProvider: [],
       greenCardsSecTierDataProvider: [],
       greenCardsThirdTierDataProvider: [],
@@ -35,43 +41,102 @@ class App extends Component {
   }
   componentDidMount() {
     this.identifyCards(this.db);
-    loadUserProfile()
-      .then((profile) => {
-        this.setState({
-          userProfile: profile ?? demoUserProfile,
-          profileDraft: profile ?? emptyUserProfile,
-          isProfileSaved: Boolean(profile),
-          isProfileLoading: false,
-        });
-      })
-      .catch((error) => {
-        this.setState({
-          isProfileLoading: false,
-          profileStorageError: error.message,
-        });
-      });
+    this.loadProfiles();
   }
+  loadProfiles = async () => {
+    const [localResult, cloudResult] = await Promise.allSettled([
+      loadUserProfile(),
+      loadCloudUserProfile(),
+    ]);
+    const localProfile =
+      localResult.status === "fulfilled" ? localResult.value : null;
+    const cloudProfile =
+      cloudResult.status === "fulfilled" ? cloudResult.value : null;
+    const errors = [];
+
+    if (localResult.status === "rejected") {
+      errors.push(`cópia local: ${localResult.reason.message}`);
+    }
+    if (cloudResult.status === "rejected") {
+      errors.push(`Firebase: ${cloudResult.reason.message}`);
+    }
+
+    if (cloudProfile) {
+      this.setState({
+        userProfile: cloudProfile,
+        profileDraft: cloudProfile,
+        isProfileSaved: true,
+        isProfileLoading: false,
+        profileStorageError: errors.join(" "),
+      });
+      if (localResult.status === "fulfilled") {
+        saveUserProfile(cloudProfile).catch((error) => {
+          this.setState({
+            profileStorageError: `Perfil carregado do Firebase, mas não foi possível atualizar a cópia local: ${error.message}`,
+          });
+        });
+      }
+      return;
+    }
+
+    this.setState({
+      userProfile: localProfile ?? demoUserProfile,
+      profileDraft: localProfile ?? emptyUserProfile,
+      isProfileSaved: Boolean(localProfile),
+      isProfileLoading: false,
+      profileMigrationPending:
+        cloudResult.status === "fulfilled" && Boolean(localProfile),
+      profileStorageError: errors.join(" "),
+    });
+  };
   handleProfileChange = (userProfile) => {
     this.setState({ profileDraft: userProfile });
   };
   handleProfileSave = async (userProfile) => {
-    await saveUserProfile(userProfile);
+    await saveCloudUserProfile(userProfile);
     this.setState({
       userProfile,
       profileDraft: userProfile,
       isProfileSaved: true,
+      profileMigrationPending: false,
       profileStorageError: "",
     });
+    try {
+      await saveUserProfile(userProfile);
+    } catch (error) {
+      this.setState({
+        profileStorageError: `Perfil salvo no Firebase, mas não foi possível atualizar a cópia local: ${error.message}`,
+      });
+    }
   };
   handleProfileDelete = async () => {
-    await deleteUserProfile();
+    await deleteCloudUserProfile();
     this.setState({
       userProfile: demoUserProfile,
       profileDraft: emptyUserProfile,
       isProfileSaved: false,
+      profileMigrationPending: false,
       profileStorageError: "",
     });
-  }
+    try {
+      await deleteUserProfile();
+    } catch (error) {
+      this.setState({
+        profileStorageError: `Perfil apagado do Firebase, mas não foi possível apagar a cópia local: ${error.message}`,
+      });
+    }
+  };
+  handleProfileMigration = async () => {
+    await saveCloudUserProfile(this.state.profileDraft);
+    this.setState({
+      isProfileSaved: true,
+      profileMigrationPending: false,
+      profileStorageError: "",
+    });
+  };
+  handleKeepProfileLocal = () => {
+    this.setState({ profileMigrationPending: false });
+  };
   getPreviousMonth(currentMonth) {
     let previousMouth = currentMonth - 1;
     if (previousMouth === -1) previousMouth = 11;
@@ -278,9 +343,12 @@ class App extends Component {
             isLoading={this.state.isProfileLoading}
             isSaved={this.state.isProfileSaved}
             storageError={this.state.profileStorageError}
+            profileMigrationPending={this.state.profileMigrationPending}
             onChange={this.handleProfileChange}
             onSave={this.handleProfileSave}
             onDelete={this.handleProfileDelete}
+            onMigrate={this.handleProfileMigration}
+            onKeepLocal={this.handleKeepProfileLocal}
           />
         ) : (
           <VitaminSection

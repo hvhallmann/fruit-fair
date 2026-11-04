@@ -6,7 +6,10 @@ const activityLevels = [
   { value: "light", label: "Leve — atividade leve 1 a 3 dias por semana" },
   { value: "moderate", label: "Moderado — atividade 3 a 5 dias por semana" },
   { value: "high", label: "Alto — atividade intensa 6 a 7 dias por semana" },
-  { value: "very-high", label: "Muito alto — atividade intensa ou trabalho físico" },
+  {
+    value: "very-high",
+    label: "Muito alto — atividade intensa ou trabalho físico",
+  },
 ];
 
 function ProfileSection({
@@ -15,11 +18,15 @@ function ProfileSection({
   isSaved,
   isSaving: isSavingParent = false,
   storageError,
+  profileMigrationPending,
   onChange,
   onSave,
   onDelete,
+  onMigrate,
+  onKeepLocal,
 }) {
   const [isSaving, setIsSaving] = useState(false);
+  const [isMigrating, setIsMigrating] = useState(false);
   const [message, setMessage] = useState("");
 
   async function handleSubmit(event) {
@@ -36,7 +43,7 @@ function ProfileSection({
         weightKg: Number(profile.weightKg),
         energyTargetKcal: Number(profile.energyTargetKcal),
       });
-      setMessage("Perfil salvo neste dispositivo.");
+      setMessage("Perfil salvo no Firebase e neste dispositivo.");
     } catch (error) {
       setMessage(`Não foi possível salvar o perfil: ${error.message}`);
     } finally {
@@ -49,9 +56,23 @@ function ProfileSection({
 
     try {
       await onDelete();
-      setMessage("Perfil local apagado.");
+      setMessage("Perfil apagado do Firebase e deste dispositivo.");
     } catch (error) {
       setMessage(`Não foi possível apagar o perfil: ${error.message}`);
+    }
+  }
+
+  async function handleMigrate() {
+    setIsMigrating(true);
+    setMessage("");
+
+    try {
+      await onMigrate();
+      setMessage("Perfil enviado ao Firebase.");
+    } catch (error) {
+      setMessage(`Não foi possível enviar o perfil: ${error.message}`);
+    } finally {
+      setIsMigrating(false);
     }
   }
 
@@ -70,19 +91,29 @@ function ProfileSection({
         energética é informada por você; o app não a calcula a partir do peso,
         da altura ou da atividade.
       </p>
-      <p className="profile-privacy" role="note">
-        Seus dados ficam apenas neste navegador e dispositivo, no IndexedDB.
-        Este formulário não envia os dados do perfil ao Firebase; por isso, a
-        equipe do aplicativo não consegue acessar este perfil local. O Firebase
-        Analytics é separado e pode coletar eventos de uso conforme sua
-        configuração. O e-mail é opcional. Evite salvar dados pessoais em um
-        dispositivo compartilhado.
-      </p>
 
       {storageError && (
         <p className="profile-error" role="alert">
-          Não foi possível acessar o perfil local: {storageError}
+          Problema ao sincronizar o perfil: {storageError}
         </p>
+      )}
+      {profileMigrationPending && (
+        <div
+          className="profile-privacy"
+          role="group"
+          aria-label="Migração do perfil"
+        >
+          <p>
+            Encontramos um perfil salvo neste dispositivo, mas ainda não na
+            nuvem. Você pode enviá-lo ao Firebase ou mantê-lo apenas localmente.
+          </p>
+          <button type="button" disabled={isMigrating} onClick={handleMigrate}>
+            {isMigrating ? "Enviando…" : "Enviar perfil existente ao Firebase"}
+          </button>
+          <button type="button" disabled={isMigrating} onClick={onKeepLocal}>
+            Manter apenas neste dispositivo
+          </button>
+        </div>
       )}
       {isLoading ? (
         <p role="status">Carregando o perfil salvo neste dispositivo…</p>
@@ -171,9 +202,7 @@ function ProfileSection({
           </label>
           <div className="profile-actions">
             <button type="submit" disabled={isSaving}>
-              {isSaving || isSavingParent
-                ? "Salvando…"
-                : "Salvar neste dispositivo"}
+              {isSaving || isSavingParent ? "Salvando…" : "Salvar perfil"}
             </button>
             {isSaved && (
               <button
@@ -182,7 +211,7 @@ function ProfileSection({
                 disabled={isSaving || isSavingParent}
                 onClick={handleDelete}
               >
-                Apagar dados locais
+                Apagar dados salvos
               </button>
             )}
           </div>

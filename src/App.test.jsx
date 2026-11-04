@@ -16,6 +16,11 @@ import {
   loadUserProfile,
   saveUserProfile,
 } from "./db/profileStorage.js";
+import {
+  deleteCloudUserProfile,
+  loadCloudUserProfile,
+  saveCloudUserProfile,
+} from "./db/cloudProfileStorage.js";
 
 vi.mock("./db/profileStorage.js", () => ({
   deleteUserProfile: vi.fn().mockResolvedValue(undefined),
@@ -37,6 +42,12 @@ vi.mock("./db/profileStorage.js", () => ({
   },
   loadUserProfile: vi.fn().mockResolvedValue(null),
   saveUserProfile: vi.fn().mockResolvedValue(undefined),
+}));
+
+vi.mock("./db/cloudProfileStorage.js", () => ({
+  deleteCloudUserProfile: vi.fn().mockResolvedValue(undefined),
+  loadCloudUserProfile: vi.fn().mockResolvedValue(null),
+  saveCloudUserProfile: vi.fn().mockResolvedValue(undefined),
 }));
 
 function estimatedNutrient(menu, database, nutrientKey, category, targetUnit) {
@@ -277,10 +288,13 @@ describe("Feira da Fruta App", () => {
     ).toEqual(["Cromo", "Iodo", "Molibdênio", "Cloro"]);
   });
 
-  it("saves profile inputs in local browser storage and can clear them", async () => {
+  it("saves profile inputs to Firestore and the local cache, then clears them", async () => {
     loadUserProfile.mockResolvedValueOnce(null);
     saveUserProfile.mockResolvedValueOnce(undefined);
     deleteUserProfile.mockResolvedValueOnce(undefined);
+    loadCloudUserProfile.mockResolvedValueOnce(null);
+    saveCloudUserProfile.mockResolvedValueOnce(undefined);
+    deleteCloudUserProfile.mockResolvedValueOnce(undefined);
 
     await renderApp();
     fireEvent.click(screen.getByRole("button", { name: "Meu perfil" }));
@@ -304,10 +318,10 @@ describe("Feira da Fruta App", () => {
       target: { value: "ana@example.com" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: "Salvar neste dispositivo" }));
+    fireEvent.click(screen.getByRole("button", { name: "Salvar perfil" }));
 
     expect(await screen.findByRole("status")).toHaveTextContent(
-      "Perfil salvo neste dispositivo.",
+      "Perfil salvo no Firebase e neste dispositivo.",
     );
     expect(saveUserProfile).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -319,22 +333,31 @@ describe("Feira da Fruta App", () => {
         activityLevel: "moderate",
       }),
     );
-    expect(
-      screen.getByText(/não envia os dados do perfil ao Firebase/i),
-    ).toBeInTheDocument();
+    expect(saveCloudUserProfile).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "Ana",
+        email: "ana@example.com",
+        heightCm: 180,
+        weightKg: 78,
+        energyTargetKcal: 2000,
+        activityLevel: "moderate",
+      }),
+    );
+    expect(screen.getByText(/Firebase Firestore/)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Apagar dados locais" }));
+    fireEvent.click(screen.getByRole("button", { name: "Apagar dados salvos" }));
     expect(await screen.findByRole("status")).toHaveTextContent(
-      "Perfil local apagado.",
+      "Perfil apagado do Firebase e deste dispositivo.",
     );
     expect(deleteUserProfile).toHaveBeenCalledTimes(1);
+    expect(deleteCloudUserProfile).toHaveBeenCalledTimes(1);
     expect(screen.getByLabelText("Nome")).toHaveValue("");
     expect(screen.getByLabelText("Altura (cm)")).toHaveValue(null);
     expect(screen.getByLabelText("Peso (kg)")).toHaveValue(null);
     expect(
       screen.getByLabelText("Necessidade energética estimada (kcal/dia)"),
     ).toHaveValue(null);
-    expect(screen.queryByRole("button", { name: "Apagar dados locais" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Apagar dados salvos" })).toBeNull();
     expect(emptyUserProfile).toMatchObject({
       name: "",
       heightCm: "",
@@ -343,6 +366,34 @@ describe("Feira da Fruta App", () => {
       energyTargetKcal: "",
       activityLevel: "",
     });
+  });
+
+  it("asks before migrating an existing local profile to Firestore", async () => {
+    const localProfile = {
+      name: "Ana",
+      heightCm: 180,
+      weightKg: 78,
+      email: "ana@example.com",
+      energyTargetKcal: 2000,
+      activityLevel: "moderate",
+    };
+    loadUserProfile.mockResolvedValueOnce(localProfile);
+    loadCloudUserProfile.mockResolvedValueOnce(null);
+    saveCloudUserProfile.mockResolvedValueOnce(undefined);
+
+    await renderApp();
+    fireEvent.click(screen.getByRole("button", { name: "Meu perfil" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Enviar perfil existente ao Firebase" }),
+    );
+
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Perfil enviado ao Firebase.",
+    );
+    expect(saveCloudUserProfile).toHaveBeenCalledWith(localProfile);
+    expect(
+      screen.queryByRole("button", { name: "Enviar perfil existente ao Firebase" }),
+    ).toBeNull();
   });
 
   it("provides sourced vitamin and mineral profiles for produce items", () => {
