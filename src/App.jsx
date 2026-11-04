@@ -226,6 +226,7 @@ class App extends Component {
           title={elem.name}
           image={elem.key}
           tip={elem.tip}
+          storageTip={elem.storageTip}
         />
       ));
     const secListItems =
@@ -237,6 +238,7 @@ class App extends Component {
           title={elem.name}
           image={elem.key}
           tip={elem.tip}
+          storageTip={elem.storageTip}
         />
       ));
     const thirdListItems =
@@ -248,6 +250,7 @@ class App extends Component {
           title={elem.name}
           image={elem.key}
           tip={elem.tip}
+          storageTip={elem.storageTip}
         />
       ));
     const yellowListItems =
@@ -259,6 +262,7 @@ class App extends Component {
           title={elem.name}
           image={elem.key}
           tip={elem.tip}
+          storageTip={elem.storageTip}
         />
       ));
     return (

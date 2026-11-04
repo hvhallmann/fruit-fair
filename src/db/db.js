@@ -1379,4 +1379,148 @@ const db = [
   },
 ];
 
-export default db;
+const storageTips = {
+  abacate:
+    "Deixe amadurecer fora da geladeira. Quando ceder levemente, leve à geladeira para retardar o amadurecimento; depois de cortado, proteja a polpa com limão e guarde em recipiente fechado.",
+  abacaxi:
+    "Guarde inteiro na geladeira e consuma em poucos dias. Depois de cortado, mantenha em recipiente fechado e refrigerado.",
+  ameixa:
+    "Guarde madura e sem lavar na gaveta da geladeira; lave apenas antes de consumir. Se ainda estiver firme, deixe amadurecer fora da geladeira.",
+  figo:
+    "É delicado: mantenha sem lavar, em recipiente ventilado na geladeira, e consuma logo. Lave apenas antes de comer.",
+  banana:
+    "Deixe em local fresco e ventilado, longe do sol. Separe das frutas que amadurecem rápido; quando estiver no ponto, refrigerar ajuda a conservar a polpa, embora a casca escureça.",
+  caqui:
+    "Deixe amadurecer em temperatura ambiente. Quando estiver macio e pronto para comer, conserve na geladeira e consuma logo.",
+  "coco-seco":
+    "Mantenha inteiro em local fresco, seco e ventilado. Depois de aberto, refrigere a polpa em recipiente fechado e consuma em poucos dias.",
+  "coco-verde":
+    "Conserve inteiro na geladeira e consuma enquanto estiver fresco. Depois de aberto, mantenha a água refrigerada em recipiente fechado.",
+  goiaba:
+    "Deixe amadurecer fora da geladeira. Quando madura, guarde na geladeira sem lavar e consuma logo; depois de cortada, mantenha em recipiente fechado.",
+  kiwi:
+    "Deixe amadurecer em temperatura ambiente; para acelerar, coloque perto de uma banana. Quando maduro, guarde na geladeira, sem lavar.",
+  "laranja-bahia":
+    "Guarde em local fresco e ventilado ou na gaveta da geladeira para durar mais. Evite lavar antes de armazenar.",
+  "laranja-lima":
+    "Guarde em local fresco e ventilado ou na gaveta da geladeira para durar mais. Evite lavar antes de armazenar.",
+  "laranja-pera":
+    "Guarde em local fresco e ventilado ou na gaveta da geladeira para durar mais. Evite lavar antes de armazenar.",
+  limao:
+    "Conserve na gaveta da geladeira, sem lavar, para retardar o ressecamento. Depois de cortado, cubra a parte exposta e refrigere.",
+  maca:
+    "Guarde na gaveta da geladeira, sem lavar, longe de folhas e de alimentos sensíveis ao etileno que libera. Separe unidades machucadas.",
+  "mamao-formosa":
+    "Deixe amadurecer fora da geladeira. Quando maduro, refrigere; depois de cortado, guarde coberto em recipiente fechado.",
+  "mamao-havai":
+    "Deixe amadurecer fora da geladeira. Quando maduro, refrigere; depois de cortado, guarde coberto em recipiente fechado.",
+  manga:
+    "Deixe amadurecer em temperatura ambiente. Quando madura, guarde na geladeira; depois de cortada, conserve em recipiente fechado.",
+  maracuja:
+    "Guarde em local fresco e ventilado; para prolongar a conservação, mantenha na geladeira. A polpa retirada deve ficar em recipiente fechado e refrigerado.",
+  melancia:
+    "Mantenha inteira em local fresco. Depois de cortada, cubra ou coloque em recipiente fechado e refrigere; mantenha a casca limpa antes de cortar.",
+  melao:
+    "Deixe amadurecer em temperatura ambiente. Quando maduro, refrigere; depois de cortado, guarde em recipiente fechado.",
+  morango:
+    "Refrigere sem lavar, em recipiente forrado com papel absorvente e sem apertar as frutas. Retire unidades amassadas e lave apenas antes de consumir.",
+  "pera-nacional":
+    "Deixe amadurecer fora da geladeira e, quando estiver no ponto, refrigere sem lavar. Mantenha longe de alimentos sensíveis ao etileno.",
+  pessego:
+    "Deixe amadurecer em temperatura ambiente, sem empilhar. Quando maduro, guarde na geladeira e lave apenas antes de consumir.",
+  pinhao:
+    "Mantenha refrigerado e sem umidade excessiva; para guardar por mais tempo, cozinhe e congele em porções bem fechadas.",
+  "tangerina-murgot":
+    "Guarde em local fresco e ventilado ou na gaveta da geladeira. Não lave antes de armazenar e retire frutas com sinais de mofo.",
+  "tangerina-ponkan":
+    "Guarde em local fresco e ventilado ou na gaveta da geladeira. Não lave antes de armazenar e retire frutas com sinais de mofo.",
+  "uva-todas":
+    "Refrigere sem lavar, de preferência na embalagem ventilada. Lave apenas na hora de comer e retire bagas estragadas do cacho.",
+  "uva-italia-rubi":
+    "Refrigere sem lavar, de preferência na embalagem ventilada. Lave apenas na hora de comer e retire bagas estragadas do cacho.",
+  "uva-niagara":
+    "Refrigere sem lavar, de preferência na embalagem ventilada. Lave apenas na hora de comer e retire bagas estragadas do cacho.",
+  agriao:
+    "Retire folhas danificadas e refrigere sem lavar, envolto em papel-toalha levemente úmido dentro de um saco ou recipiente. Lave antes de consumir.",
+  alface:
+    "Retire folhas danificadas, seque bem e refrigere em recipiente ou saco com papel-toalha. Lave apenas antes de consumir.",
+  brocolis:
+    "Refrigere sem lavar em saco perfurado ou recipiente ventilado e consuma logo. Lave apenas antes de preparar.",
+  "couve-flor":
+    "Refrigere sem lavar, com as folhas externas protegendo a cabeça, em saco perfurado. Lave apenas antes de preparar.",
+  "couve-chinesa":
+    "Refrigere sem lavar em saco ou recipiente com papel-toalha para absorver a umidade. Lave as folhas antes de consumir.",
+  "cheiro-verde":
+    "Retire folhas danificadas e refrigere os talos envolvidos em papel-toalha levemente úmido, dentro de recipiente fechado. Lave antes de usar.",
+  "couve-manteiga":
+    "Refrigere as folhas secas em saco ou recipiente fechado com papel-toalha. Lave e corte apenas pouco antes de preparar.",
+  escarola:
+    "Refrigere sem lavar em saco ou recipiente com papel-toalha. Lave as folhas apenas antes de consumir.",
+  espinafre:
+    "Refrigere sem lavar em recipiente com papel-toalha seco para absorver a umidade. Lave apenas antes de preparar.",
+  repolho:
+    "Guarde inteiro e sem lavar na gaveta da geladeira. Depois de cortado, cubra a parte exposta e refrigere.",
+  rucula:
+    "Refrigere sem lavar em recipiente com papel-toalha seco. Lave e seque as folhas apenas antes de consumir.",
+  "abobora-todas":
+    "Inteira, mantenha em local fresco, seco e ventilado. Depois de cortada, retire as sementes se desejar, cubra e refrigere.",
+  abobrinha:
+    "Refrigere sem lavar na gaveta de legumes e evite deixá-la úmida. Lave apenas antes de preparar.",
+  berinjela:
+    "Guarde sem lavar em local fresco ou na gaveta da geladeira, longe de frutas que liberam etileno. Evite temperaturas muito baixas.",
+  chuchu:
+    "Refrigere sem lavar em saco perfurado ou na gaveta de legumes. Se cortado, cubra e guarde em recipiente fechado.",
+  jilo:
+    "Refrigere sem lavar, seco, em saco de papel ou recipiente ventilado. Lave apenas antes de preparar.",
+  "milho-verde":
+    "Mantenha as espigas com a palha na geladeira e consuma logo. Para guardar por mais tempo, retire os grãos e congele.",
+  pepino:
+    "Guarde seco e sem lavar em local fresco ou na parte menos fria da geladeira. Evite temperaturas muito baixas e proximidade de frutas que liberam etileno.",
+  pimentao:
+    "Refrigere seco e sem lavar na gaveta de legumes. Depois de cortado, guarde em recipiente fechado e consuma em poucos dias.",
+  quiabo:
+    "Refrigere seco, sem lavar, em saco de papel ou recipiente ventilado. Lave e corte apenas na hora de preparar.",
+  tomate:
+    "Deixe amadurecer em temperatura ambiente, fora do sol. Quando bem maduro, refrigere se precisar prolongar a conservação e traga à temperatura ambiente antes de comer.",
+  vagem:
+    "Refrigere sem lavar em saco ou recipiente fechado e consuma logo. Lave e retire as pontas antes de preparar.",
+  gengibre:
+    "Guarde seco e sem descascar na geladeira, em recipiente fechado. Também pode ser congelado inteiro ou em pedaços.",
+  taro:
+    "Mantenha em local fresco, seco, escuro e ventilado; não refrigere cru. Descarte unidades úmidas, mofadas ou amolecidas.",
+  alho:
+    "Guarde as cabeças inteiras em local seco, escuro e ventilado; não refrigere. Dentes descascados devem ficar em recipiente fechado na geladeira.",
+  batata:
+    "Guarde em local escuro, seco e ventilado, longe de cebolas; não refrigere crua. Descarte batatas verdes ou muito brotadas.",
+  "batata-doce":
+    "Mantenha em local fresco, seco, escuro e ventilado; evite a geladeira. Depois de cortada, cubra e refrigere.",
+  "batata-salsa":
+    "Refrigere sem lavar em saco perfurado ou recipiente. Retire as folhas antes de guardar e lave apenas antes de cozinhar.",
+  beterraba:
+    "Retire as folhas e refrigere as raízes sem lavar em saco perfurado. As folhas podem ser guardadas separadamente e usadas logo.",
+  cebola:
+    "Guarde inteira em local seco, escuro e ventilado, separada das batatas. Depois de cortada ou descascada, mantenha refrigerada em recipiente fechado.",
+  cenoura:
+    "Retire as folhas e refrigere as raízes sem lavar em saco fechado ou recipiente. Mantenha longe de frutas que liberam etileno.",
+  inhame:
+    "Mantenha em local fresco, seco, escuro e ventilado; não refrigere cru. Descarte unidades com umidade, mofo ou partes moles.",
+  "mandioca-aipim":
+    "É perecível: descasque e cozinhe logo ou refrigere por curto período. Para conservar por mais tempo, descasque, corte e congele em porções.",
+  nabo:
+    "Retire as folhas e refrigere a raiz sem lavar em saco perfurado. Guarde as folhas separadamente e use logo.",
+  rabanete:
+    "Retire as folhas para evitar que murchem e refrigere os rabanetes sem lavar em saco ou recipiente. Lave antes de consumir.",
+};
+
+const dbWithStorageTips = db.map((item) => {
+  if (item.isClass) return item;
+
+  const storageTip = storageTips[item.key];
+  if (!storageTip) {
+    throw new Error(`Missing storage tip for produce item "${item.key}".`);
+  }
+
+  return { ...item, storageTip };
+});
+
+export default dbWithStorageTips;

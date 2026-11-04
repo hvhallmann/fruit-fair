@@ -473,7 +473,14 @@ describe("Feira da Fruta App", () => {
   });
 
   it("opens tips from a button and closes with Escape, restoring focus", () => {
-    render(<Card image="banana" title="Banana" tip="Dica de teste" />);
+    render(
+      <Card
+        image="banana"
+        title="Banana"
+        tip="Dica de escolha"
+        storageTip="Dica de armazenamento"
+      />,
+    );
 
     const cardButton = screen.getByRole("button", { name: "Banana" });
     cardButton.focus();
@@ -481,9 +488,20 @@ describe("Feira da Fruta App", () => {
 
     const dialog = screen.getByRole("dialog", { name: "Dica sobre Banana" });
     expect(dialog).toHaveFocus();
+    expect(screen.getByText("Como escolher")).toBeInTheDocument();
+    expect(screen.getByText("Dica de escolha")).toBeInTheDocument();
+    expect(screen.getByText("Como armazenar")).toBeInTheDocument();
+    expect(screen.getByText("Dica de armazenamento")).toBeInTheDocument();
     fireEvent.keyDown(dialog, { key: "Escape" });
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(cardButton).toHaveFocus();
+  });
+
+  it("provides a storage tip for every produce item", () => {
+    const produce = staticDb.filter((item) => !item.isClass);
+
+    expect(produce.length).toBeGreaterThan(0);
+    expect(produce.every((item) => item.storageTip?.trim())).toBe(true);
   });
 });

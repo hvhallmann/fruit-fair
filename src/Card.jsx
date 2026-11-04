@@ -124,7 +124,16 @@ class Card extends Component {
                   ✕
                 </button>
               </div>
-              <p className="tip-modal-text">{this.props.tip}</p>
+              <section className="tip-modal-section">
+                <h3 className="tip-modal-heading">Como escolher</h3>
+                <p className="tip-modal-text">{this.props.tip}</p>
+              </section>
+              {this.props.storageTip && (
+                <section className="tip-modal-section">
+                  <h3 className="tip-modal-heading">Como armazenar</h3>
+                  <p className="tip-modal-text">{this.props.storageTip}</p>
+                </section>
+              )}
             </div>
           </div>
         )}

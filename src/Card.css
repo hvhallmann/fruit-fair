@@ -134,6 +134,16 @@
   color: #333;
 }
 
+.tip-modal-section + .tip-modal-section {
+  margin-top: 1rem;
+}
+
+.tip-modal-heading {
+  margin: 0 0 0.3rem;
+  color: #23452e;
+  font-size: 0.9rem;
+}
+
 .tip-modal-text {
   margin: 0;
   font-size: 0.9rem;
