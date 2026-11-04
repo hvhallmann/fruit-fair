@@ -10,6 +10,11 @@ import {
   loadUserProfile,
   saveUserProfile,
 } from "./db/profileStorage.js";
+import {
+  deleteCloudUserProfile,
+  loadCloudUserProfile,
+  saveCloudUserProfile,
+} from "./db/cloudProfileStorage.js";
 import "./firebase.js";
 import "./App.css";
 
@@ -22,11 +27,13 @@ class App extends Component {
     this.db = staticDb;
     this.state = {
       activePage: "seasonal",
+      selectedMonth: new Date().getMonth(),
       userProfile: demoUserProfile,
       profileDraft: emptyUserProfile,
       isProfileSaved: false,
       isProfileLoading: true,
       profileStorageError: "",
+      profileMigrationPending: false,
       greenCardsDataProvider: [],
       greenCardsSecTierDataProvider: [],
       greenCardsThirdTierDataProvider: [],
@@ -34,44 +41,108 @@ class App extends Component {
     };
   }
   componentDidMount() {
-    this.identifyCards(this.db);
-    loadUserProfile()
-      .then((profile) => {
-        this.setState({
-          userProfile: profile ?? demoUserProfile,
-          profileDraft: profile ?? emptyUserProfile,
-          isProfileSaved: Boolean(profile),
-          isProfileLoading: false,
-        });
-      })
-      .catch((error) => {
-        this.setState({
-          isProfileLoading: false,
-          profileStorageError: error.message,
-        });
-      });
+    this.identifyCards(this.db, this.state.selectedMonth);
+    this.loadProfiles();
   }
+  handleMonthChange = (offset) => {
+    const selectedMonth = (this.state.selectedMonth + offset + 12) % 12;
+    this.setState({ selectedMonth });
+    this.identifyCards(this.db, selectedMonth);
+  };
+  loadProfiles = async () => {
+    const [localResult, cloudResult] = await Promise.allSettled([
+      loadUserProfile(),
+      loadCloudUserProfile(),
+    ]);
+    const localProfile =
+      localResult.status === "fulfilled" ? localResult.value : null;
+    const cloudProfile =
+      cloudResult.status === "fulfilled" ? cloudResult.value : null;
+    const errors = [];
+
+    if (localResult.status === "rejected") {
+      errors.push(`cópia local: ${localResult.reason.message}`);
+    }
+    if (cloudResult.status === "rejected") {
+      errors.push(`Firebase: ${cloudResult.reason.message}`);
+    }
+
+    if (cloudProfile) {
+      this.setState({
+        userProfile: cloudProfile,
+        profileDraft: cloudProfile,
+        isProfileSaved: true,
+        isProfileLoading: false,
+        profileStorageError: errors.join(" "),
+      });
+      if (localResult.status === "fulfilled") {
+        saveUserProfile(cloudProfile).catch((error) => {
+          this.setState({
+            profileStorageError: `Perfil carregado do Firebase, mas não foi possível atualizar a cópia local: ${error.message}`,
+          });
+        });
+      }
+      return;
+    }
+
+    this.setState({
+      userProfile: localProfile ?? demoUserProfile,
+      profileDraft: localProfile ?? emptyUserProfile,
+      isProfileSaved: Boolean(localProfile),
+      isProfileLoading: false,
+      profileMigrationPending:
+        cloudResult.status === "fulfilled" && Boolean(localProfile),
+      profileStorageError: errors.join(" "),
+    });
+  };
   handleProfileChange = (userProfile) => {
     this.setState({ profileDraft: userProfile });
   };
   handleProfileSave = async (userProfile) => {
-    await saveUserProfile(userProfile);
+    await saveCloudUserProfile(userProfile);
     this.setState({
       userProfile,
       profileDraft: userProfile,
       isProfileSaved: true,
+      profileMigrationPending: false,
       profileStorageError: "",
     });
+    try {
+      await saveUserProfile(userProfile);
+    } catch (error) {
+      this.setState({
+        profileStorageError: `Perfil salvo no Firebase, mas não foi possível atualizar a cópia local: ${error.message}`,
+      });
+    }
   };
   handleProfileDelete = async () => {
-    await deleteUserProfile();
+    await deleteCloudUserProfile();
     this.setState({
       userProfile: demoUserProfile,
       profileDraft: emptyUserProfile,
       isProfileSaved: false,
+      profileMigrationPending: false,
       profileStorageError: "",
     });
-  }
+    try {
+      await deleteUserProfile();
+    } catch (error) {
+      this.setState({
+        profileStorageError: `Perfil apagado do Firebase, mas não foi possível apagar a cópia local: ${error.message}`,
+      });
+    }
+  };
+  handleProfileMigration = async () => {
+    await saveCloudUserProfile(this.state.profileDraft);
+    this.setState({
+      isProfileSaved: true,
+      profileMigrationPending: false,
+      profileStorageError: "",
+    });
+  };
+  handleKeepProfileLocal = () => {
+    this.setState({ profileMigrationPending: false });
+  };
   getPreviousMonth(currentMonth) {
     let previousMouth = currentMonth - 1;
     if (previousMouth === -1) previousMouth = 11;
@@ -93,14 +164,13 @@ class App extends Component {
       return arr.indexOf(elem) === pos;
     });
   }
-  identifyCards(database) {
+  identifyCards(database, currentMonth) {
     if (!database) return;
 
     let dbClone = database.slice();
     let dbClone2 = database.slice();
     let dbCloneToYellow = database.slice();
 
-    const currentMonth = new Date().getMonth();
     const firstListCards = database.filter((elem, ind) => {
       if (elem.season[currentMonth] === "Forte") {
         dbClone.splice(dbClone.indexOf(elem), 1);
@@ -142,7 +212,7 @@ class App extends Component {
     this.setState({ yellowCardsDataProvider: yellowListCards });
   }
   render() {
-    const currentMonth = new Date().getMonth();
+    const currentMonth = this.state.selectedMonth;
     const previousMonthName = this.getMonthName(
       this.getPreviousMonth(currentMonth),
     );
@@ -228,6 +298,32 @@ class App extends Component {
         </nav>
         {this.state.activePage === "seasonal" ? (
           <div>
+            {import.meta.env.DEV && (
+              <nav
+                className="month-test-controls"
+                aria-label="Controles de teste de mês"
+              >
+                <button
+                  type="button"
+                  className="page-tab"
+                  aria-label="Mês anterior"
+                  onClick={() => this.handleMonthChange(-1)}
+                >
+                  Anterior
+                </button>
+                <span aria-live="polite">
+                  Mês de referência: {this.getMonthName(currentMonth)}
+                </span>
+                <button
+                  type="button"
+                  className="page-tab"
+                  aria-label="Próximo mês"
+                  onClick={() => this.handleMonthChange(1)}
+                >
+                  Próximo
+                </button>
+              </nav>
+            )}
             <p className="intro-copy">
               A sazonalidade é uma característica natural de todos os vegetais e
               plantas. É relacionada à época em que o cultivo rende frutos
@@ -278,9 +374,12 @@ class App extends Component {
             isLoading={this.state.isProfileLoading}
             isSaved={this.state.isProfileSaved}
             storageError={this.state.profileStorageError}
+            profileMigrationPending={this.state.profileMigrationPending}
             onChange={this.handleProfileChange}
             onSave={this.handleProfileSave}
             onDelete={this.handleProfileDelete}
+            onMigrate={this.handleProfileMigration}
+            onKeepLocal={this.handleKeepProfileLocal}
           />
         ) : (
           <VitaminSection

@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /userProfiles/{userId} {
+      function hasValidProfile() {
+        return request.resource.data.keys().hasAll([
+            'name',
+            'heightCm',
+            'weightKg',
+            'email',
+            'energyTargetKcal',
+            'activityLevel',
+            'updatedAt'
+          ])
+          && request.resource.data.keys().hasOnly([
+            'name',
+            'heightCm',
+            'weightKg',
+            'email',
+            'energyTargetKcal',
+            'activityLevel',
+            'updatedAt'
+          ])
+          && request.resource.data.name is string
+          && request.resource.data.name.size() > 0
+          && request.resource.data.name.size() <= 100
+          && request.resource.data.heightCm is number
+          && request.resource.data.heightCm >= 50
+          && request.resource.data.heightCm <= 260
+          && request.resource.data.weightKg is number
+          && request.resource.data.weightKg >= 10
+          && request.resource.data.weightKg <= 500
+          && request.resource.data.email is string
+          && request.resource.data.email.size() <= 254
+          && request.resource.data.energyTargetKcal is number
+          && request.resource.data.energyTargetKcal >= 500
+          && request.resource.data.energyTargetKcal <= 10000
+          && request.resource.data.activityLevel in [
+            'sedentary',
+            'light',
+            'moderate',
+            'high',
+            'very-high'
+          ]
+          && request.resource.data.updatedAt == request.time;
+      }
+
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && hasValidProfile();
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
