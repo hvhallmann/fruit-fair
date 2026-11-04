@@ -162,3 +162,7 @@ The second version is here - [git](https://github.com/hvhallmann/fruit-fair-reac
 ### Checklist
 
 Good checklist to follow - https://specification.website/checklist/
+
+### Deploy
+
+You can find the app at = [fruit-fair](https://fruit-fair.web.app/) and firebase config at - [firebase](https://console.firebase.google.com/project/fruit-fair/overview)
