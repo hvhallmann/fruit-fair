@@ -1,6 +1,15 @@
 import React, { Component } from "react";
-import staticDb from "./db/db.js";
+import staticDb from "./db/dbWithNutrients.js";
 import Card from "./Card.jsx";
+import ProfileSection from "./ProfileSection.jsx";
+import VitaminSection from "./VitaminSection.jsx";
+import {
+  deleteUserProfile,
+  demoUserProfile,
+  emptyUserProfile,
+  loadUserProfile,
+  saveUserProfile,
+} from "./db/profileStorage.js";
 import "./firebase.js";
 import "./App.css";
 
@@ -12,6 +21,12 @@ class App extends Component {
     super(props);
     this.db = staticDb;
     this.state = {
+      activePage: "seasonal",
+      userProfile: demoUserProfile,
+      profileDraft: emptyUserProfile,
+      isProfileSaved: false,
+      isProfileLoading: true,
+      profileStorageError: "",
       greenCardsDataProvider: [],
       greenCardsSecTierDataProvider: [],
       greenCardsThirdTierDataProvider: [],
@@ -20,6 +35,42 @@ class App extends Component {
   }
   componentDidMount() {
     this.identifyCards(this.db);
+    loadUserProfile()
+      .then((profile) => {
+        this.setState({
+          userProfile: profile ?? demoUserProfile,
+          profileDraft: profile ?? emptyUserProfile,
+          isProfileSaved: Boolean(profile),
+          isProfileLoading: false,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          isProfileLoading: false,
+          profileStorageError: error.message,
+        });
+      });
+  }
+  handleProfileChange = (userProfile) => {
+    this.setState({ profileDraft: userProfile });
+  };
+  handleProfileSave = async (userProfile) => {
+    await saveUserProfile(userProfile);
+    this.setState({
+      userProfile,
+      profileDraft: userProfile,
+      isProfileSaved: true,
+      profileStorageError: "",
+    });
+  };
+  handleProfileDelete = async () => {
+    await deleteUserProfile();
+    this.setState({
+      userProfile: demoUserProfile,
+      profileDraft: emptyUserProfile,
+      isProfileSaved: false,
+      profileStorageError: "",
+    });
   }
   getPreviousMonth(currentMonth) {
     let previousMouth = currentMonth - 1;
@@ -148,49 +199,96 @@ class App extends Component {
             <span className="brand-connector">da</span>
             <span className="brand-word brand-word-accent">FRUTA</span>
           </h1>
-          <p className="intro-copy">
-            A sazonalidade é uma característica natural de todos os vegetais e
-            plantas. É relacionada à época em que o cultivo rende frutos
-            naturalmente, sendo colhidos exatamente no tempo certo e nas
-            condições climáticas ideais, o que proporciona um sabor melhor,
-            principalmente nas frutas. Além disso, esses alimentos costumam
-            apresentar preço mais acessível e são bem mais saudáveis em termos
-            de concentração de nutrientes e uso reduzido de agrotóxicos. Por
-            isso, veja quais opções temos HOJE para você escolher na hora de ir
-            à feira:
-          </p>
         </header>
-        <section className="season-section">
-          <h2 className="section-title">
-            A sugestão é levar os seguintes produtos:
-          </h2>
-          <div className="produce-grid">
-            <div className="columns-custom">{listItems}</div>
+        <nav className="page-tabs" aria-label="Navegação principal">
+          <button
+            type="button"
+            className="page-tab"
+            aria-current={this.state.activePage === "seasonal" ? "page" : undefined}
+            onClick={() => this.setState({ activePage: "seasonal" })}
+          >
+            Feira do mês
+          </button>
+          <button
+            type="button"
+            className="page-tab"
+            aria-current={this.state.activePage === "profile" ? "page" : undefined}
+            onClick={() => this.setState({ activePage: "profile" })}
+          >
+            Meu perfil
+          </button>
+          <button
+            type="button"
+            className="page-tab"
+            aria-current={this.state.activePage === "vitamins" ? "page" : undefined}
+            onClick={() => this.setState({ activePage: "vitamins" })}
+          >
+            Vitaminas e minerais
+          </button>
+        </nav>
+        {this.state.activePage === "seasonal" ? (
+          <div>
+            <p className="intro-copy">
+              A sazonalidade é uma característica natural de todos os vegetais e
+              plantas. É relacionada à época em que o cultivo rende frutos
+              naturalmente, sendo colhidos exatamente no tempo certo e nas
+              condições climáticas ideais, o que proporciona um sabor melhor,
+              principalmente nas frutas. Além disso, esses alimentos costumam
+              apresentar preço mais acessível e são bem mais saudáveis em termos
+              de concentração de nutrientes e uso reduzido de agrotóxicos. Por
+              isso, veja quais opções temos HOJE para você escolher na hora de
+              ir à feira:
+            </p>
+            <section className="season-section">
+              <h2 className="section-title">
+                A sugestão é levar os seguintes produtos:
+              </h2>
+              <div className="produce-grid">
+                <div className="columns-custom">{listItems}</div>
+              </div>
+            </section>
+            <section className="season-section">
+              <h2 className="section-title">
+                Boa pedida de {previousMonthName}:
+              </h2>
+              <div className="produce-grid">
+                <div className="columns-custom">{secListItems}</div>
+              </div>
+            </section>
+            <section className="season-section">
+              <h2 className="section-title">
+                Saindo do forno para {nextMonthName}!
+              </h2>
+              <div className="produce-grid">
+                <div className="columns-custom">{thirdListItems}</div>
+              </div>
+            </section>
+            <section className="season-section">
+              <h2 className="section-title">
+                Estes você ainda consegue encontrar:
+              </h2>
+              <div className="produce-grid">
+                <div className="columns-custom">{yellowListItems}</div>
+              </div>
+            </section>
           </div>
-        </section>
-        <section className="season-section">
-          <h2 className="section-title">Boa pedida de {previousMonthName}:</h2>
-          <div className="produce-grid">
-            <div className="columns-custom">{secListItems}</div>
-          </div>
-        </section>
-        <section className="season-section">
-          <h2 className="section-title">
-            Saindo do forno para {nextMonthName}!
-          </h2>
-          <div className="produce-grid">
-            <div className="columns-custom">{thirdListItems}</div>
-          </div>
-        </section>
-
-        <section className="season-section">
-          <h2 className="section-title">
-            Estes você ainda consegue encontrar:
-          </h2>
-          <div className="produce-grid">
-            <div className="columns-custom">{yellowListItems}</div>
-          </div>
-        </section>
+        ) : this.state.activePage === "profile" ? (
+          <ProfileSection
+            profile={this.state.profileDraft}
+            isLoading={this.state.isProfileLoading}
+            isSaved={this.state.isProfileSaved}
+            storageError={this.state.profileStorageError}
+            onChange={this.handleProfileChange}
+            onSave={this.handleProfileSave}
+            onDelete={this.handleProfileDelete}
+          />
+        ) : (
+          <VitaminSection
+            database={this.db}
+            monthIndex={currentMonth}
+            userProfile={this.state.userProfile}
+          />
+        )}
       </main>
     );
   }
