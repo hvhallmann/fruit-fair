@@ -91,7 +91,6 @@ function ProfileSection({
         energética é informada por você; o app não a calcula a partir do peso,
         da altura ou da atividade.
       </p>
-
       {storageError && (
         <p className="profile-error" role="alert">
           Problema ao sincronizar o perfil: {storageError}

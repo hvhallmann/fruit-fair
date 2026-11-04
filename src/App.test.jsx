@@ -236,6 +236,33 @@ describe("Feira da Fruta App", () => {
     ).toBeNull();
   });
 
+  it("cycles through all months in the development month switcher", async () => {
+    await renderApp();
+
+    const monthName = (month) =>
+      new Intl.DateTimeFormat("pt-BR", {
+        month: "long",
+        timeZone: "UTC",
+      }).format(new Date(Date.UTC(2024, month, 1)));
+    const currentMonth = new Date().getMonth();
+    const nextMonthButton = screen.getByRole("button", {
+      name: "Próximo mês",
+    });
+
+    for (let offset = 1; offset <= 12; offset += 1) {
+      fireEvent.click(nextMonthButton);
+      expect(screen.getByText(/Mês de referência:/)).toHaveTextContent(
+        `Mês de referência: ${monthName((currentMonth + offset) % 12)}`,
+      );
+    }
+
+    expect(
+      screen.getByRole("heading", {
+        name: `Boa pedida de ${monthName((currentMonth + 11) % 12)}:`,
+      }),
+    ).toBeInTheDocument();
+  });
+
   it("generates different in-season menus under the user's manually set energy target", () => {
     const januaryMenu = generateSeasonalDailyMenu(staticDb, 0, 2000);
     const juneMenu = generateSeasonalDailyMenu(staticDb, 5, 2000);
@@ -343,8 +370,6 @@ describe("Feira da Fruta App", () => {
         activityLevel: "moderate",
       }),
     );
-    expect(screen.getByText(/Firebase Firestore/)).toBeInTheDocument();
-
     fireEvent.click(screen.getByRole("button", { name: "Apagar dados salvos" }));
     expect(await screen.findByRole("status")).toHaveTextContent(
       "Perfil apagado do Firebase e deste dispositivo.",

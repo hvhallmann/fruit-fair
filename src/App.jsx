@@ -27,6 +27,7 @@ class App extends Component {
     this.db = staticDb;
     this.state = {
       activePage: "seasonal",
+      selectedMonth: new Date().getMonth(),
       userProfile: demoUserProfile,
       profileDraft: emptyUserProfile,
       isProfileSaved: false,
@@ -40,9 +41,14 @@ class App extends Component {
     };
   }
   componentDidMount() {
-    this.identifyCards(this.db);
+    this.identifyCards(this.db, this.state.selectedMonth);
     this.loadProfiles();
   }
+  handleMonthChange = (offset) => {
+    const selectedMonth = (this.state.selectedMonth + offset + 12) % 12;
+    this.setState({ selectedMonth });
+    this.identifyCards(this.db, selectedMonth);
+  };
   loadProfiles = async () => {
     const [localResult, cloudResult] = await Promise.allSettled([
       loadUserProfile(),
@@ -158,14 +164,13 @@ class App extends Component {
       return arr.indexOf(elem) === pos;
     });
   }
-  identifyCards(database) {
+  identifyCards(database, currentMonth) {
     if (!database) return;
 
     let dbClone = database.slice();
     let dbClone2 = database.slice();
     let dbCloneToYellow = database.slice();
 
-    const currentMonth = new Date().getMonth();
     const firstListCards = database.filter((elem, ind) => {
       if (elem.season[currentMonth] === "Forte") {
         dbClone.splice(dbClone.indexOf(elem), 1);
@@ -207,7 +212,7 @@ class App extends Component {
     this.setState({ yellowCardsDataProvider: yellowListCards });
   }
   render() {
-    const currentMonth = new Date().getMonth();
+    const currentMonth = this.state.selectedMonth;
     const previousMonthName = this.getMonthName(
       this.getPreviousMonth(currentMonth),
     );
@@ -293,6 +298,32 @@ class App extends Component {
         </nav>
         {this.state.activePage === "seasonal" ? (
           <div>
+            {import.meta.env.DEV && (
+              <nav
+                className="month-test-controls"
+                aria-label="Controles de teste de mês"
+              >
+                <button
+                  type="button"
+                  className="page-tab"
+                  aria-label="Mês anterior"
+                  onClick={() => this.handleMonthChange(-1)}
+                >
+                  Anterior
+                </button>
+                <span aria-live="polite">
+                  Mês de referência: {this.getMonthName(currentMonth)}
+                </span>
+                <button
+                  type="button"
+                  className="page-tab"
+                  aria-label="Próximo mês"
+                  onClick={() => this.handleMonthChange(1)}
+                >
+                  Próximo
+                </button>
+              </nav>
+            )}
             <p className="intro-copy">
               A sazonalidade é uma característica natural de todos os vegetais e
               plantas. É relacionada à época em que o cultivo rende frutos
